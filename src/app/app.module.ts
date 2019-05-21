@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,9 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
-
-
-import { StocksService } from './services/stocks.service';
+import { UiModule } from '@shared/ui';
 
 @NgModule({
   declarations: [
@@ -28,10 +26,10 @@ import { StocksService } from './services/stocks.service';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    HttpClientModule
-  ],
-  providers: [
-    StocksService
+    HttpClientModule,
+    UiModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   bootstrap: [AppComponent]
 })
