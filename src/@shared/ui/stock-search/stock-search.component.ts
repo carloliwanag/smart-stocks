@@ -10,6 +10,9 @@ import { StocksService } from '@shared/services';
       <p>Search results:</p>
       <div *ngFor="let result of results">
         {{ result.stock_symbol }} {{ result.stock_name }}
+        <div>
+          <app-stock-detail [chartData]="stockData"></app-stock-detail>
+        </div>
       </div>
     </ng-container>
   `,
@@ -19,6 +22,7 @@ import { StocksService } from '@shared/services';
 export class StockSearchComponent {
   results: Array<Object|undefined>;
   stockCode: FormControl;
+  stockData;
 
   constructor(private stocksService: StocksService, private cd: ChangeDetectorRef) {
     this.stockCode = new FormControl();
@@ -30,6 +34,10 @@ export class StockSearchComponent {
       .toPromise()
       .then(response => {
         this.results = response;
+        if (this.results && this.results.length > 0) {
+          this.stockData = this.results[0];
+          console.log(this.stockData);
+        }
         this.cd.detectChanges();
       });
   }

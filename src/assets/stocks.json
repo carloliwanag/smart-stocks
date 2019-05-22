@@ -397,7 +397,7 @@
             "stock_name": "Apple Inc.",
             "historical_details":[
                 {
-                    "    fetchdate":"2019-05-20",
+                    "fetchdate":"2019-05-20",
                     "Volume":"38064234",
                     "Open":"183.5200",
                     "Low":"180.2839",
@@ -789,7 +789,7 @@
             "stock_name": "Google",
             "historical_details":[
                 {
-                    "    fetchdate":"2019-05-20",
+                    "fetchdate":"2019-05-20",
                     "Volume":"1343890",
                     "Open":"1144.5000",
                     "Low":"1131.4400",
