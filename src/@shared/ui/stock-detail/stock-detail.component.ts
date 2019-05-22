@@ -15,7 +15,7 @@ import {
 export class StockDetailComponent implements OnChanges {
   @Input() chartData;
 
-  view: any[] = [700, 400];
+  view: any[] = [600, 300];
 
   // options
   showXAxis = true;
@@ -34,12 +34,13 @@ export class StockDetailComponent implements OnChanges {
 
   openLowHigh: any[] = [];
 
-  
+  volume:any[] = [];
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData && this.chartData) {
       // do something       
       this.createOpenLowHighData();
+      this.createVolume();
     }
   }
 
@@ -48,24 +49,21 @@ export class StockDetailComponent implements OnChanges {
       let open = this.chartData.historical_details.map(historicalDetail => {
         return {
           name: historicalDetail.fetchdate,
-          value: historicalDetail.Open,          
-          max: historicalDetail.Open + 500
+          value: historicalDetail.Open
         };
       });
 
       let low = this.chartData.historical_details.map(historicalDetail => {
         return {
           name: historicalDetail.fetchdate,
-          value: historicalDetail.Low,          
-          max: historicalDetail.Low + 500
+          value: historicalDetail.Low
         };
       });
 
       let high = this.chartData.historical_details.map(historicalDetail => {
         return {
           name: historicalDetail.fetchdate,
-          value: historicalDetail.High,          
-          max: historicalDetail.High + 500
+          value: historicalDetail.High
         };
       });
 
@@ -83,6 +81,22 @@ export class StockDetailComponent implements OnChanges {
           series: this.sortByKey(high, 'name')
         }
       ];      
+    }
+  }
+
+  createVolume() {
+    if (this.chartData) {
+      let volume = this.chartData.historical_details.map(historicalDetail => {
+        return {
+          name: historicalDetail.fetchdate,
+          value: historicalDetail.Volume
+        };        
+        
+      });
+
+      this.volume = volume;
+
+      console.log(this.volume);
     }
   }
 
