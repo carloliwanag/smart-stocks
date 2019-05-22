@@ -1,5 +1,8 @@
-html, body { 
-  height: 100%; 
+@import "theme";
+
+html, body {
+  background-color: $dark-background;
+  color: $light-text;
 }
 
 body { 

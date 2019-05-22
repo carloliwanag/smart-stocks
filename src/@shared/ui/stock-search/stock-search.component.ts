@@ -1,13 +1,17 @@
-import { Input, Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { StocksService } from '@shared/services';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { StocksService } from "@shared/services";
 
 @Component({
   template: `
     <input type="text" [formControl]="stockCode" />
     <button (click)="onSearch()">Search</button>
     <ng-container *ngIf="results">
-      <p>Search results:</p>
       <div *ngFor="let result of results">
         <h1>{{ result.stock_symbol }} {{ result.stock_name }}</h1>
         <div>
@@ -16,16 +20,31 @@ import { StocksService } from '@shared/services';
       </div>
     </ng-container>
   `,
-  selector: 'app-stock-search',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-stock-search",
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StockSearchComponent {
-  results: Array<Object|undefined>;
+export class StockSearchComponent implements OnInit {
+  results: Array<Object | undefined>;
   stockCode: FormControl;
   stockData;
 
-  constructor(private stocksService: StocksService, private cd: ChangeDetectorRef) {
+  constructor(
+    private stocksService: StocksService,
+    private cd: ChangeDetectorRef
+  ) {
     this.stockCode = new FormControl();
+  }
+
+  ngOnInit() {
+    this.stocksService
+      .getAll()
+      .toPromise()
+      .then(response => {
+        const initialValue = response.data[0];
+        this.results = [initialValue];
+        this.stockData = initialValue;
+        this.cd.detectChanges();
+      });
   }
 
   onSearch() {

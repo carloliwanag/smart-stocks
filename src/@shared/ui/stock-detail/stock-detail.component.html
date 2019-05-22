@@ -3,6 +3,21 @@
     <h2>Historical Details</h2>
     <div>
       <h3>Open, Low, High</h3>
+
+      <canvas baseChart width="400" height="400"
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [chartType]="'line'">
+      </canvas>
+
+      <canvas baseChart width="400" height="400"
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [chartType]="'bar'">
+      </canvas>
+
       <ngx-charts-line-chart
         [view]="view"
         [scheme]="colorScheme"

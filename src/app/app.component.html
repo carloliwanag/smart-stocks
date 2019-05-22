@@ -1,6 +1,33 @@
-<app-main-nav>
-  <router-outlet></router-outlet>
-</app-main-nav>
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <app-main-nav></app-main-nav>
+    <router-outlet></router-outlet>
 
-<!-- temporary -->
-<app-stock-search></app-stock-search>
+    <section class="Main"
+      fxLayout 
+      fxLayout.xs="column"
+      fxLayoutAlign="center"
+      fxLayoutGap="32px"
+      fxLayoutGap.xs="0">
+      <div class="Main-cards" fxFlex="20%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>News</mat-card-title>
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <div class="Main-cards" fxFlex="60%">
+        <mat-card>
+          <app-stock-search></app-stock-search>
+        </mat-card>
+      </div>
+      <div class="Main-cards" fxFlex="20%">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Watch List</mat-card-title>
+            </mat-card-header>
+          </mat-card>
+      </div>
+    </section>
+    </mat-sidenav-content>
+</mat-sidenav-container>
