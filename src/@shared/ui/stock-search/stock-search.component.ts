@@ -9,7 +9,7 @@ import { StocksService } from '@shared/services';
     <ng-container *ngIf="results">
       <p>Search results:</p>
       <div *ngFor="let result of results">
-        {{ result.stock_symbol }} {{ result.stock_name }}
+        <h1>{{ result.stock_symbol }} {{ result.stock_name }}</h1>
         <div>
           <app-stock-detail [chartData]="stockData"></app-stock-detail>
         </div>
