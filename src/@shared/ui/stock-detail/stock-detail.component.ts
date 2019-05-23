@@ -62,42 +62,42 @@ export class StockDetailComponent implements OnChanges {
 
   createOpenLowHighData() {
     if (this.chartData) {
-      let open = this.chartData.historical_details.map(historicalDetail => {
-        return {
-          name: historicalDetail.fetchdate,
-          value: historicalDetail.Open
-        };
-      });
+      // let open = this.chartData.historical_details.map(historicalDetail => {
+      //   return {
+      //     name: historicalDetail.fetchdate,
+      //     value: historicalDetail.Open
+      //   };
+      // });
 
-      let low = this.chartData.historical_details.map(historicalDetail => {
-        return {
-          name: historicalDetail.fetchdate,
-          value: historicalDetail.Low
-        };
-      });
+      // let low = this.chartData.historical_details.map(historicalDetail => {
+      //   return {
+      //     name: historicalDetail.fetchdate,
+      //     value: historicalDetail.Low
+      //   };
+      // });
 
-      let high = this.chartData.historical_details.map(historicalDetail => {
-        return {
-          name: historicalDetail.fetchdate,
-          value: historicalDetail.High
-        };
-      });
+      // let high = this.chartData.historical_details.map(historicalDetail => {
+      //   return {
+      //     name: historicalDetail.fetchdate,
+      //     value: historicalDetail.High
+      //   };
+      // });
 
       const historicData = this.chartData.historical_details;
-      this.openLowHigh = [
-        {
-          name: "Open",
-          series: this.sortByKey(open, "name")
-        },
-        {
-          name: "Low",
-          series: this.sortByKey(low, "name")
-        },
-        {
-          name: "High",
-          series: this.sortByKey(high, "name")
-        }
-      ];
+      // this.openLowHigh = [
+      //   {
+      //     name: "Open",
+      //     series: this.sortByKey(open, "name")
+      //   },
+      //   {
+      //     name: "Low",
+      //     series: this.sortByKey(low, "name")
+      //   },
+      //   {
+      //     name: "High",
+      //     series: this.sortByKey(high, "name")
+      //   }
+      // ];
 
       this.lineChartData = [
         {
@@ -128,16 +128,8 @@ export class StockDetailComponent implements OnChanges {
       const historicData = this.chartData.historical_details;
       this.barChartData = [
         {
-          data: historicData.map(details => details.Open).reverse(),
-          label: "Open"
-        },
-        {
-          data: historicData.map(details => details.Low).reverse(),
-          label: "Low"
-        },
-        {
-          data: historicData.map(details => details.High).reverse(),
-          label: "High"
+          data: historicData.map(details => details.Volume).reverse(),
+          label: "Volume"
         }
       ];
 
@@ -148,24 +140,18 @@ export class StockDetailComponent implements OnChanges {
         responsive: true
       };
 
-      let volume = this.chartData.historical_details.map(historicalDetail => {
-        return {
-          name: historicalDetail.fetchdate,
-          value: historicalDetail.Volume
-        };
-      });
+      // let volume = this.chartData.historical_details.map(historicalDetail => {
+      //   return {
+      //     name: historicalDetail.fetchdate,
+      //     value: historicalDetail.Volume
+      //   };
+      // });
 
-      this.volume = volume;
+      // this.volume = volume;
 
-      console.log(this.volume);
+      // console.log(this.volume);
     }
   }
 
-  sortByKey(array, key) {
-    return array.sort(function(a, b) {
-      var x = a[key];
-      var y = b[key];
-      return x < y ? -1 : x > y ? 1 : 0;
-    });
-  }
+  
 }
