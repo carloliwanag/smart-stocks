@@ -4,55 +4,22 @@
     <div>
       <h3>Open, Low, High</h3>
 
-      <canvas baseChart width="400" height="400"
+      <canvas baseChart width="300" height="200"
         [datasets]="lineChartData"
         [labels]="lineChartLabels"
         [options]="lineChartOptions"
         [chartType]="'line'">
       </canvas>
 
-      <canvas baseChart width="400" height="400"
+      <canvas baseChart width="300" height="200"
         [datasets]="barChartData"
         [labels]="barChartLabels"
         [options]="barChartOptions"
         [chartType]="'bar'">
       </canvas>
 
-      <ngx-charts-line-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="openLowHigh"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [autoScale]="autoScale"
-        [timeline]="timeline"
-        (select)="onSelect($event)"
-      >
-      </ngx-charts-line-chart>
+      
     </div>
-    <div>
-      <h3>Volume</h3>
-      <ngx-charts-bar-vertical 
-        [view]="view" 
-        [scheme] ="colorScheme" 
-        [results]="volume" 
-        [gradient]="gradient" 
-        [xAxis]="'showXAxis'"
-        [yAxis]="showYAxis" 
-        [legend]="" 
-        [showXAxisLabel]="'false'" 
-        [showYAxisLabel]="showYAxisLabel" 
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="'Volume'" 
-        (select)="onSelect($event)"
-      >				
-      </ngx-charts-bar-vertical>
-    </div>
+    
   </div>
 </div>
