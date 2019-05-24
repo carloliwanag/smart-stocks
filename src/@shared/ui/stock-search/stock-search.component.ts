@@ -55,7 +55,6 @@ export class StockSearchComponent implements OnInit {
         this.results = response;
         if (this.results && this.results.length > 0) {
           this.stockData = this.results[0];
-          console.log(this.stockData);
         }
         this.cd.detectChanges();
       });

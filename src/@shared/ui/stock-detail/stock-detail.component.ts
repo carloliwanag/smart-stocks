@@ -19,27 +19,6 @@ import { BaseChartDirective, Label } from "ng2-charts";
 export class StockDetailComponent implements OnChanges {
   @Input() chartData;
 
-  view: any[] = [600, 300];
-
-  // options
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = true;
-  showXAxisLabel = true;
-  xAxisLabel = "Date";
-  showYAxisLabel = true;
-  yAxisLabel = "Open Low High";
-  timeline = true;
-
-  colorScheme = {
-    domain: ["#5AA454", "#A10A28", "#C7B42C", "#AAAAAA"]
-  };
-
-  openLowHigh: any[] = [];
-
-  volume: any[] = [];
-
   barChartData: ChartDataSets[];
   barChartLabels: Label[];
   barChartOptions: any;
@@ -61,43 +40,9 @@ export class StockDetailComponent implements OnChanges {
   }
 
   createOpenLowHighData() {
-    if (this.chartData) {
-      // let open = this.chartData.historical_details.map(historicalDetail => {
-      //   return {
-      //     name: historicalDetail.fetchdate,
-      //     value: historicalDetail.Open
-      //   };
-      // });
+    if (this.chartData) {      
 
-      // let low = this.chartData.historical_details.map(historicalDetail => {
-      //   return {
-      //     name: historicalDetail.fetchdate,
-      //     value: historicalDetail.Low
-      //   };
-      // });
-
-      // let high = this.chartData.historical_details.map(historicalDetail => {
-      //   return {
-      //     name: historicalDetail.fetchdate,
-      //     value: historicalDetail.High
-      //   };
-      // });
-
-      const historicData = this.chartData.historical_details;
-      // this.openLowHigh = [
-      //   {
-      //     name: "Open",
-      //     series: this.sortByKey(open, "name")
-      //   },
-      //   {
-      //     name: "Low",
-      //     series: this.sortByKey(low, "name")
-      //   },
-      //   {
-      //     name: "High",
-      //     series: this.sortByKey(high, "name")
-      //   }
-      // ];
+      const historicData = this.chartData.historical_details;      
 
       this.lineChartData = [
         {
@@ -139,17 +84,6 @@ export class StockDetailComponent implements OnChanges {
       this.barChartOptions = {
         responsive: true
       };
-
-      // let volume = this.chartData.historical_details.map(historicalDetail => {
-      //   return {
-      //     name: historicalDetail.fetchdate,
-      //     value: historicalDetail.Volume
-      //   };
-      // });
-
-      // this.volume = volume;
-
-      // console.log(this.volume);
     }
   }
 
