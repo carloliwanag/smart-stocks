@@ -30,4 +30,18 @@ export class StocksService {
         })
       );
   }
+
+  public getNewsByStockSymbol(symbol: string): Rx.Observable<any | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-news/${symbol}`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.data) {
+            return response.data;
+          }
+
+          return undefined;
+        })
+      );
+  }
 }
