@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { StockList } from './stocks.service.types';
-import * as Rx from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import * as Rx from "rxjs";
+import { map } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import { StockList } from "./stocks.service.types";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class StocksService {
   constructor(private httpClient: HttpClient) {}
@@ -16,11 +17,17 @@ export class StocksService {
       .pipe(map((response: StockList) => response)); // literally does nothing, bypass TS error
   }
 
-  public getByStockSymbol(symbol: string): Rx.Observable<Array<Object|undefined>> {
-    return this.getAll()
+  public getByStockSymbol(symbol: string): Rx.Observable<any | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-detail/${symbol}`)
       .pipe(
-        map(result => 
-          result.data.filter(stock => (stock as any).stock_symbol === symbol))
-        );
+        map((response: any) => {
+          if (response && response.data) {
+            return response.data;
+          }
+
+          return undefined;
+        })
+      );
   }
 }
