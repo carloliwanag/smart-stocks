@@ -91,7 +91,7 @@ export class AppComponent {
   }
 
   private searchStockSymbol(symbol: string) {
-    if (symbol === this.currentStockSymbol) {
+    if (symbol === this.currentStockSymbol || !symbol) {
       return;
     }
 
