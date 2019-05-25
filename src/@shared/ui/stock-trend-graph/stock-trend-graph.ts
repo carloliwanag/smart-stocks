@@ -57,7 +57,7 @@ export class StockTrendGraphComponent implements OnChanges {
           label: "High"
         },
         {
-          data: historicData.map(details => details.High).reverse(),
+          data: historicData.map(details => details.Close).reverse(),
           label: "Close"
         }
       ];
