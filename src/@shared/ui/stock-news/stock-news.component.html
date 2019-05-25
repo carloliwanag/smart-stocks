@@ -1,8 +1,6 @@
 <mat-list role="list">
-  <div *ngFor="let news of stockNews">
-      <mat-list-item>
-          {{news}}
-        </mat-list-item>
-        <mat-divider></mat-divider>
-  </div>  
+  <mat-list-item *ngFor="let news of stockNews; last as last">
+    {{ news }}
+    <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+  </mat-list-item>
 </mat-list>
