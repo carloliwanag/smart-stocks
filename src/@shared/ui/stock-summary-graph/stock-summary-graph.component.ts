@@ -45,28 +45,28 @@ export class StockSummaryGraphComponent implements OnChanges {
 
       this.lineChartData = [
         {
-          data: data.map(details => details.Sell),
+          data: data.map(details => details.Sell).reverse(),
           label: "Sell"
         },
         {
-          data: data.map(details => details.Buy),
+          data: data.map(details => details.Buy).reverse(),
           label: "Buy"
         },
         {
-          data: data.map(details => details["Strong Sell"]),
+          data: data.map(details => details["Strong Sell"]).reverse(),
           label: "Strong Sell"
         },
         {
-          data: data.map(details => details["Strong Buy"]),
+          data: data.map(details => details["Strong Buy"]).reverse(),
           label: "Strong Buy"
         },
         {
-          data: data.map(details => details.Hold),
+          data: data.map(details => details.Hold).reverse(),
           label: "Hold"
         }
       ];
 
-      this.lineChartLabels = data.map(details => details.Period);
+      this.lineChartLabels = data.map(details => details.Period).reverse();
       this.lineChartOptions = {
         responsive: true
       };
