@@ -7,7 +7,7 @@ import {
   SimpleChanges,
   ViewChild
 } from "@angular/core";
-import { ChartDataSets } from "chart.js";
+import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
 @Component({
@@ -33,7 +33,7 @@ export class StockTrendGraphComponent implements OnChanges {
 
   lineChartData: ChartDataSets[];
   lineChartLabels: Label[];
-  lineChartOptions: any;
+  lineChartOptions: ChartOptions;
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
@@ -43,11 +43,7 @@ export class StockTrendGraphComponent implements OnChanges {
     if (changes.chartData) {
       const historicData = this.chartData.historical_details;
 
-      this.lineChartData = [
-        {
-          data: historicData.map(details => details.Open).reverse(),
-          label: "Open"
-        },
+      this.lineChartData = [        
         {
           data: historicData.map(details => details.Low).reverse(),
           label: "Low"
@@ -55,10 +51,6 @@ export class StockTrendGraphComponent implements OnChanges {
         {
           data: historicData.map(details => details.High).reverse(),
           label: "High"
-        },
-        {
-          data: historicData.map(details => details.Close).reverse(),
-          label: "Close"
         }
       ];
 
@@ -66,7 +58,12 @@ export class StockTrendGraphComponent implements OnChanges {
         .map(details => details.fetchdate)
         .reverse();
       this.lineChartOptions = {
-        responsive: true
+        responsive: true,
+        elements: {
+          line: {
+            fill: false
+          }
+        }
       };
       this.cd.detectChanges();
     }
