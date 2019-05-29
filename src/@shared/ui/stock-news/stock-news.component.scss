@@ -1,5 +1,9 @@
-.Stock-news {
+.StockNews {
   .mat-list-item {
     height: auto;
+  }
+
+  &-list {
+    max-height: 540px;
   }
 }

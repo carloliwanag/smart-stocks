@@ -3,12 +3,14 @@ import * as Rx from "rxjs";
 
 @Component({
   template: `
-    <mat-list class="Stock-news">
+    <mat-list class="StockNews">
       <ng-container *ngIf="stockData$ | async as stockNews">
-        <mat-list-item *ngFor="let news of stockNews; last as last">
-          <p>{{ news }}</p>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </mat-list-item>
+        <perfect-scrollbar class="StockNews-list">
+          <mat-list-item *ngFor="let news of stockNews; last as last">
+            <p>{{ news }}</p>
+            <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+          </mat-list-item>
+        </perfect-scrollbar>
       </ng-container>
       <ng-container *ngIf="!(stockData$ | async)">
         <mat-list-item>No entries found</mat-list-item>

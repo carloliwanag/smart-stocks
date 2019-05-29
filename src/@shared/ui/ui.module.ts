@@ -10,6 +10,11 @@ import {
 } from "@angular/material";
 import { StockDetailComponent } from "@shared/ui/stock-detail";
 import { ChartsModule } from "ng2-charts";
+import {
+  PerfectScrollbarConfigInterface,
+  PerfectScrollbarModule,
+  PERFECT_SCROLLBAR_CONFIG
+} from "ngx-perfect-scrollbar";
 import { NavSearchComponent } from "./nav-search";
 import { StockFinanceDetailsComponent } from "./stock-finance-details";
 import { StockNewsComponent } from "./stock-news";
@@ -18,6 +23,10 @@ import { StockStatisticsComponent } from "./stock-statistics";
 import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 @NgModule({
   declarations: [
@@ -40,6 +49,7 @@ import { StockVolumeGraphComponent } from "./stock-volume-graph";
     MatIconModule,
     MatInputModule,
     MatTableModule,
+    PerfectScrollbarModule,
     ReactiveFormsModule
   ],
   exports: [
@@ -52,6 +62,12 @@ import { StockVolumeGraphComponent } from "./stock-volume-graph";
     StockQuoteComponent,
     StockStatisticsComponent,
     StockSummaryGraphComponent
+  ],
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
   ]
 })
 export class UiModule {}

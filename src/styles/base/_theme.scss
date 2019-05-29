@@ -208,3 +208,20 @@ $altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
   padding: .5em .85em;
   min-height: 2.5em;
 }
+
+.ps__raily-y {
+  background-color: transparent;
+}
+
+perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
+  background: transparent;
+}
+
+perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y, 
+perfect-scrollbar > .ps.ps--scrolling-x > .ps__rail-x {
+  background: transparent !important;
+}
+
+.ps .ps__rail-x:hover, .ps .ps__rail-y:hover, .ps .ps__rail-x:focus, .ps .ps__rail-y:focus, .ps .ps__rail-x.ps--clicking, .ps .ps__rail-y.ps--clicking {
+  background: transparent !important;
+}
