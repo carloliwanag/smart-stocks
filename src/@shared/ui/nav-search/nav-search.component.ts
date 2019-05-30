@@ -109,8 +109,8 @@ export class NavSearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchText$ = this.searchText.valueChanges.pipe(
       filter((searchString: string) => searchString && searchString.length > 2),
-      debounceTime(500),
       distinctUntilChanged(),
+      debounceTime(500),
       tap(resp => {
         this.isLoading = true;
         this.stockList = [];
@@ -146,7 +146,6 @@ export class NavSearchComponent implements OnInit, OnDestroy {
   }
 
   blurEvent() {
-    console.log(this.searchText.value);
     if (!this.searchText.value) {
       return this.close();
     }
