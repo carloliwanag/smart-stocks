@@ -1,6 +1,15 @@
-import { Component } from "@angular/core";
+import { isDefined } from "@angular/compiler/src/util";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { StocksService } from "@shared/services";
 import * as Rx from "rxjs";
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  startWith,
+  switchMap,
+  tap
+} from "rxjs/operators";
 
 export const DEFAULT_STOCK_SYMBOL = "GOOG";
 
@@ -71,68 +80,84 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
   selector: "app-root",
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+  searchStockResultSubject = new Rx.BehaviorSubject(undefined);
   searchNewsSubject = new Rx.BehaviorSubject(undefined);
-  searchNews$ = this.searchNewsSubject.asObservable();
   searchStockSubject = new Rx.BehaviorSubject(undefined);
+
+  searchStockResult$: Rx.Observable<string>;
+  searchNews$ = this.searchNewsSubject.asObservable();
   searchStock$ = this.searchStockSubject.asObservable();
+
   currentStockSymbol: string;
   isLoadingStocks = false;
   isLoadingNews = false;
 
+  searchStockSubscription: Rx.Subscription;
+  searchNewsSubscription: Rx.Subscription;
+
   constructor(private stocksService: StocksService) {}
 
   ngOnInit() {
-    this.searchStockSymbol(DEFAULT_STOCK_SYMBOL);
+    this.searchStockResult$ = this.searchStockResultSubject.asObservable().pipe(
+      startWith(DEFAULT_STOCK_SYMBOL),
+      filter(isDefined),
+      distinctUntilChanged(),
+      tap(symbol => {
+        this.currentStockSymbol = symbol;
+      })
+    );
+
+    this.searchStockSubscription = this.searchStockResult$
+      .pipe(
+        tap(() => {
+          this.isLoadingStocks = true;
+        }),
+        switchMap(symbol => this.stocksService.getByStockSymbol(symbol)),
+        map(data => {
+          if (data) {
+            return {
+              ...data,
+              symbol: this.currentStockSymbol
+            };
+          }
+
+          return undefined;
+        }),
+        tap(() => {
+          this.isLoadingStocks = false;
+        })
+      )
+      .subscribe(data => this.searchStockSubject.next(data));
+
+    this.searchNewsSubscription = this.searchStockResult$
+      .pipe(
+        tap(() => {
+          this.isLoadingNews = true;
+        }),
+        switchMap(symbol => this.stocksService.getNewsByStockSymbol(symbol)),
+        map(data => {
+          if (data && data.TOP_NEWS.length > 0) {
+            return data.TOP_NEWS;
+          }
+
+          return undefined;
+        }),
+        tap(() => {
+          this.isLoadingNews = false;
+        })
+      )
+      .subscribe(data => this.searchNewsSubject.next(data));
+  }
+
+  ngOnDestroy() {
+    if (this.searchStockSubscription) {
+      this.searchStockSubscription.unsubscribe();
+    }
   }
 
   onSearchBlur(keyword: string) {
-    this.searchStockSymbol(keyword);
-  }
-
-  private searchStockSymbol(symbol: string) {
-    if (symbol === this.currentStockSymbol || !symbol) {
-      return;
-    }
-
-    this.isLoadingStocks = true;
-    this.isLoadingNews = true;
-
-    this.stocksService
-      .getByStockSymbol(symbol)
-      .toPromise()
-      .then(data => {
-        if (data) {
-          return {
-            ...data,
-            symbol
-          };
-        }
-
-        return undefined;
-      })
-      .catch(() => undefined)
-      .then(data => {
-        this.searchStockSubject.next(data);
-        this.isLoadingStocks = false;
-      });
-
-    this.stocksService
-      .getNewsByStockSymbol(symbol)
-      .toPromise()
-      .then(data => {
-        if (data && data.TOP_NEWS.length > 0) {
-          return data.TOP_NEWS;
-        }
-
-        return undefined;
-      })
-      .catch(() => undefined)
-      .then(data => {
-        this.searchNewsSubject.next(data);
-        this.isLoadingNews = false;
-      });
-
-    this.currentStockSymbol = symbol;
+    this.currentStockSymbol = keyword;
+    this.searchStockResultSubject.next(keyword);
   }
 }

@@ -3,7 +3,11 @@ import { Injectable } from "@angular/core";
 import * as Rx from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
-import { StockList } from "./stocks.service.types";
+import {
+  StockList,
+  StockNamesList,
+  StockNamesResult
+} from "./stocks.service.types";
 
 @Injectable({
   providedIn: "root"
@@ -43,5 +47,13 @@ export class StocksService {
           return undefined;
         })
       );
+  }
+
+  public getSearchStocksBySymbol(
+    symbol: string
+  ): Rx.Observable<StockNamesList> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock/${symbol}`)
+      .pipe(map((response: StockNamesResult) => response.data));
   }
 }

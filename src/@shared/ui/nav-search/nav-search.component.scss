@@ -50,3 +50,19 @@
 form {
   display: contents !important;
 }
+
+.auto-complete.mat-autocomplete-panel {
+  &::-webkit-scrollbar {
+      width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+      border-radius: 4px;
+      background-color: green;
+  }
+
+  &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: blue;
+  }
+}

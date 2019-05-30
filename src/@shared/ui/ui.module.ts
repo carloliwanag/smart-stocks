@@ -2,11 +2,14 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
+  MatAutocompleteModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatTableModule
+  MatOptionModule,
+  MatTableModule,
+  MatTooltipModule
 } from "@angular/material";
 import { StockDetailComponent } from "@shared/ui/stock-detail";
 import { ChartsModule } from "ng2-charts";
@@ -44,11 +47,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ChartsModule,
     CommonModule,
     FormsModule,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatListModule,
     MatIconModule,
     MatInputModule,
+    MatOptionModule,
     MatTableModule,
+    MatTooltipModule,
     PerfectScrollbarModule,
     ReactiveFormsModule
   ],
