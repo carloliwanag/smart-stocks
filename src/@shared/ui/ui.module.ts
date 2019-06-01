@@ -26,6 +26,7 @@ import { StockStatisticsComponent } from "./stock-statistics";
 import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
+import { StockFoiaComponent } from "./stock-foia";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -41,7 +42,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockNewsComponent,
     StockQuoteComponent,
     StockStatisticsComponent,
-    StockSummaryGraphComponent
+    StockSummaryGraphComponent,
+    StockFoiaComponent
   ],
   imports: [
     ChartsModule,
@@ -67,7 +69,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockNewsComponent,
     StockQuoteComponent,
     StockStatisticsComponent,
-    StockSummaryGraphComponent
+    StockSummaryGraphComponent,
+    StockFoiaComponent
   ],
   providers: [
     {
