@@ -57,7 +57,8 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
                 class="Main-spinner"
                 *ngIf="isLoadingFOIA"
                 [color]="'accent'"
-                [diameter]="50">
+                [diameter]="50"
+              >
               </mat-spinner>
             </mat-card>
           </div>
@@ -169,23 +170,23 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(data => this.searchNewsSubject.next(data));
 
-      this.searchFOIASubscription = this.searchStockResult$
-        .pipe(
-          tap(() => {
-            this.isLoadingFOIA = true;
-          }),
-          switchMap(symbol => this.stocksService.getFOIARequestBySymbol(symbol)),
-          map(data => {
-            if (data && data.data.length > 0) {
-              return data.data;
-            }
-            return undefined;            
-          }),
-          tap(() => {
-            this.isLoadingFOIA = false;
-          })
-        )
-        .subscribe(data => this.searchFOIASubject.next(data));
+    this.searchFOIASubscription = this.searchStockResult$
+      .pipe(
+        tap(() => {
+          this.isLoadingFOIA = true;
+        }),
+        switchMap(symbol => this.stocksService.getFOIARequestBySymbol(symbol)),
+        map(data => {
+          if (data && data.data.length > 0) {
+            return data.data;
+          }
+          return undefined;
+        }),
+        tap(() => {
+          this.isLoadingFOIA = false;
+        })
+      )
+      .subscribe(data => this.searchFOIASubject.next(data));
   }
 
   ngOnDestroy() {
