@@ -58,7 +58,7 @@ export class StocksService {
   }
 
 
-  public getFOIARequestBySymbol(symbol: string): Rx.Observable<any[]> {
+  public getFOIARequestBySymbol(symbol: string): Rx.Observable<any | undefined> {
     return this.httpClient
     .get(`${environment.API_URL}/foia/${symbol}`)
     .pipe(map((response: any) => {
