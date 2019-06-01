@@ -33,7 +33,9 @@ import { MatSort, MatTableDataSource } from "@angular/material";
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
-    <div *ngIf="!dataSource">No results found</div>
+    <mat-list *ngIf="!dataSource">
+      <mat-list-item>No results found</mat-list-item>
+    </mat-list>
   `,
   selector: "app-stock-statistics",
   styleUrls: ["./stock-statistics.component.scss"],
