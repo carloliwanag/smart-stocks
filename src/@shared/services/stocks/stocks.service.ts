@@ -56,4 +56,14 @@ export class StocksService {
       .get(`${environment.API_URL}/stock/${symbol}`)
       .pipe(map((response: StockNamesResult) => response.data));
   }
+
+
+  public getFOIARequestBySymbol(symbol: string): Rx.Observable<any[]> {
+    return this.httpClient
+    .get(`${environment.API_URL}/foia/${symbol}`)
+    .pipe(map((response: any) => {
+      console.log('foia data: ', response);
+      return response;
+    }));    
+  }
 }

@@ -44,6 +44,22 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
                 [diameter]="50"
               ></mat-spinner>
             </mat-card>
+            <mat-card>
+              <ng-container *ngIf="!isLoadingFOIA">
+                <mat-card-header>
+                  <mat-card-title>FOIA Requests</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <app-stock-foia [stockData$]="searchFOIA$"></app-stock-foia>
+                </mat-card-content>
+              </ng-container>
+              <mat-spinner
+                class="Main-spinner"
+                *ngIf="isLoadingFOIA"
+                [color]="'accent'"
+                [diameter]="50">
+              </mat-spinner>
+            </mat-card>
           </div>
           <div class="Main-cards" fxFlex="50%">
             <mat-card>
@@ -84,17 +100,21 @@ export class AppComponent implements OnInit, OnDestroy {
   searchStockResultSubject = new Rx.BehaviorSubject(undefined);
   searchNewsSubject = new Rx.BehaviorSubject(undefined);
   searchStockSubject = new Rx.BehaviorSubject(undefined);
+  searchFOIASubject = new Rx.BehaviorSubject(undefined);
 
   searchStockResult$: Rx.Observable<string>;
   searchNews$ = this.searchNewsSubject.asObservable();
   searchStock$ = this.searchStockSubject.asObservable();
+  searchFOIA$ = this.searchFOIASubject.asObservable();
 
   currentStockSymbol: string;
   isLoadingStocks = false;
   isLoadingNews = false;
+  isLoadingFOIA = false;
 
   searchStockSubscription: Rx.Subscription;
   searchNewsSubscription: Rx.Subscription;
+  searchFOIASubscription: Rx.Subscription;
 
   constructor(private stocksService: StocksService) {}
 
@@ -148,6 +168,24 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(data => this.searchNewsSubject.next(data));
+
+      this.searchFOIASubscription = this.searchStockResult$
+        .pipe(
+          tap(() => {
+            this.isLoadingFOIA = true;
+          }),
+          switchMap(symbol => this.stocksService.getFOIARequestBySymbol(symbol)),
+          map(data => {
+            if (data && data.data.length > 0) {
+              return data.data;
+            }
+            return undefined;            
+          }),
+          tap(() => {
+            this.isLoadingFOIA = false;
+          })
+        )
+        .subscribe(data => this.searchFOIASubject.next(data));
   }
 
   ngOnDestroy() {
