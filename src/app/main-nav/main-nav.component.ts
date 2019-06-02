@@ -6,8 +6,8 @@ import { map } from "rxjs/operators";
 @Component({
   template: `
     <mat-toolbar color="primary" class="MainNav">
-      <span>Chris Stocks App</span>
-      <mat-icon>scatter_plot</mat-icon>
+      <img src="assets/logo.png" class="logo"> 
+      <span>R2R Analytics</span>      
       <span class="MainNav-spacer"></span>
       <app-nav-search (onBlur)="searchBlur($event)"></app-nav-search>
       <mat-icon>home</mat-icon>
