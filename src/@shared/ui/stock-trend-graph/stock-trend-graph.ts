@@ -10,8 +10,9 @@ import {
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
-const LOW_VOLUME_COLOR = "red";
-const HIGH_VOLUME_COLOR = "green";
+const DEFAULT_FONT_COLOR = "#ccc";
+const LOW_VOLUME_COLOR = "#d9534f";
+const HIGH_VOLUME_COLOR = "#5cb85c";
 
 @Component({
   template: `
@@ -100,17 +101,17 @@ export class StockTrendGraphComponent implements OnChanges {
         },
         legend: {
           labels: {
-            fontColor: "#ccc"
+            fontColor: DEFAULT_FONT_COLOR
           }
         },
         title: {
-          fontColor: "#ccc"
+          fontColor: DEFAULT_FONT_COLOR
         },
         scales: {
           xAxes: [
             {
               ticks: {
-                fontColor: "#ccc"
+                fontColor: DEFAULT_FONT_COLOR
               }
             }
           ],
@@ -120,7 +121,7 @@ export class StockTrendGraphComponent implements OnChanges {
               id: "y-axis-0",
               ticks: {
                 beginAtZero: true,
-                fontColor: "#ccc"
+                fontColor: DEFAULT_FONT_COLOR
               }
             },
             {
@@ -129,7 +130,7 @@ export class StockTrendGraphComponent implements OnChanges {
               ticks: {
                 max: 100000000,
                 beginAtZero: false,
-                fontColor: "#ccc"
+                fontColor: DEFAULT_FONT_COLOR
               }
             }
           ]
