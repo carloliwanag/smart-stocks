@@ -7,9 +7,9 @@ import * as Rx from "rxjs";
       <mat-card>
         <ng-container *ngIf="!busy">
           <mat-card-header>
-            <mat-card-title>Summary</mat-card-title>
+            <mat-card-title>Quotes</mat-card-title>
           </mat-card-header>
-          <app-stock-summary-graph [chartData]="data"></app-stock-summary-graph>
+          <app-stock-quote [data]="data"></app-stock-quote>
         </ng-container>
         <mat-spinner
           class="StockHelper-spinner"
@@ -18,7 +18,6 @@ import * as Rx from "rxjs";
           [diameter]="50"
         ></mat-spinner>
       </mat-card>
-
       <mat-card>
         <ng-container *ngIf="!busy">
           <mat-card-header>
@@ -40,21 +39,6 @@ import * as Rx from "rxjs";
             <mat-card-title>Statistics</mat-card-title>
           </mat-card-header>
           <app-stock-statistics [data]="data"></app-stock-statistics>
-        </ng-container>
-        <mat-spinner
-          class="StockHelper-spinner"
-          *ngIf="busy"
-          [color]="'accent'"
-          [diameter]="50"
-        ></mat-spinner>
-      </mat-card>
-
-      <mat-card>
-        <ng-container *ngIf="!busy">
-          <mat-card-header>
-            <mat-card-title>Quotes</mat-card-title>
-          </mat-card-header>
-          <app-stock-quote [data]="data"></app-stock-quote>
         </ng-container>
         <mat-spinner
           class="StockHelper-spinner"

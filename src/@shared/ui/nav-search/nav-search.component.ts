@@ -96,7 +96,7 @@ export class NavSearchComponent implements OnInit, OnDestroy {
   stockList: StockSearchList = [];
   searchText = new FormControl();
   searchText$: Rx.Observable<any>;
-  searchVisible = true;
+  searchVisible = false;
 
   private searchTextSubscription: Rx.Subscription;
 

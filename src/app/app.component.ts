@@ -14,8 +14,8 @@ import {
 } from "rxjs/operators";
 
 export const DEFAULT_STOCK: StockSearch = {
-  ticker: "GOOG",
-  company_name: "Alphabet Inc."
+  ticker: "TSLA",
+  company_name: "Tesla, Inc."
 };
 
 @Component({
@@ -32,47 +32,13 @@ export const DEFAULT_STOCK: StockSearch = {
           fxLayoutGap="32px"
           fxLayoutGap.xs="0"
         >
-          <div class="Main-cards" fxFlex="20%">
-            <mat-card>
-              <ng-container *ngIf="!isLoadingStock">
-                <mat-card-header>
-                  <mat-card-title>News</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <app-stock-news [stockData$]="stock$"></app-stock-news>
-                </mat-card-content>
-              </ng-container>
-              <mat-spinner
-                class="Main-spinner"
-                *ngIf="isLoadingStock"
-                [color]="'accent'"
-                [diameter]="50"
-              ></mat-spinner>
-            </mat-card>
-            <mat-card>
-              <ng-container *ngIf="!isLoadingStock">
-                <mat-card-header>
-                  <mat-card-title>FOIA Requests</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <app-stock-foia [stockData$]="stock$"></app-stock-foia>
-                </mat-card-content>
-              </ng-container>
-              <mat-spinner
-                class="Main-spinner"
-                *ngIf="isLoadingStock"
-                [color]="'accent'"
-                [diameter]="50"
-              >
-              </mat-spinner>
-            </mat-card>
-          </div>
-          <div class="Main-cards" fxFlex="50%">
+          <div class="Main-cards" fxFlex="70%">
             <mat-card>
               <ng-container *ngIf="!isLoadingStock">
                 <mat-card-header>
                   <mat-card-title
-                    >{{ currentStockSymbol }} Historical Details</mat-card-title
+                    >{{ (stock$ | async)?.stock_code }} Historical
+                    Details</mat-card-title
                   >
                 </mat-card-header>
                 <mat-card-content>

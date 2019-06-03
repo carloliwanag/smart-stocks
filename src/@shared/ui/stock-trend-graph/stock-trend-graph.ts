@@ -10,17 +10,19 @@ import {
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
+const LOW_VOLUME_COLOR = "red";
+const HIGH_VOLUME_COLOR = "green";
+
 @Component({
   template: `
     <section>
       <canvas
         baseChart
-        width="300"
-        height="200"
-        [datasets]="lineChartData"
-        [labels]="lineChartLabels"
-        [options]="lineChartOptions"
-        [chartType]="'line'"
+        height="180px"
+        [datasets]="chartDataSet"
+        [labels]="chartLabels"
+        [options]="chartOptions"
+        [chartType]="'bar'"
       >
       </canvas>
     </section>
@@ -31,9 +33,9 @@ import { BaseChartDirective, Label } from "ng2-charts";
 export class StockTrendGraphComponent implements OnChanges {
   @Input() chartData;
 
-  lineChartData: ChartDataSets[];
-  lineChartLabels: Label[];
-  lineChartOptions: ChartOptions;
+  chartDataSet: ChartDataSets[];
+  chartLabels: Label[];
+  chartOptions: ChartOptions;
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
@@ -42,27 +44,95 @@ export class StockTrendGraphComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData) {
       const historicData = this.chartData.historical_details;
+      const volumeData = historicData.map(details => details.Volume).reverse();
+      const volumeBackgroundColor = [];
 
-      this.lineChartData = [        
+      volumeData.reduce((prev, cur) => {
+        const previous = parseFloat(prev);
+        const current = parseFloat(cur);
+
+        console.log(previous, current, previous > current);
+        if (volumeBackgroundColor.length <= 0) {
+          volumeBackgroundColor.push(
+            previous >= current ? HIGH_VOLUME_COLOR : LOW_VOLUME_COLOR
+          );
+        }
+
+        volumeBackgroundColor.push(
+          current >= previous ? HIGH_VOLUME_COLOR : LOW_VOLUME_COLOR
+        );
+        return current;
+      });
+
+      this.chartDataSet = [
+        {
+          data: volumeData,
+          label: "Volume",
+          yAxisID: "y-axis-1",
+          backgroundColor: volumeBackgroundColor,
+          hoverBackgroundColor: volumeBackgroundColor,
+          borderColor: volumeBackgroundColor,
+          hoverBorderColor: volumeBackgroundColor
+        },
         {
           data: historicData.map(details => details.Low).reverse(),
-          label: "Low"
+          label: "Low",
+          type: "line",
+          yAxisID: "y-axis-0"
         },
         {
           data: historicData.map(details => details.High).reverse(),
-          label: "High"
+          label: "High",
+          yAxisID: "y-axis-0",
+          type: "line"
         }
       ];
 
-      this.lineChartLabels = historicData
+      this.chartLabels = historicData
         .map(details => details.fetchdate)
         .reverse();
-      this.lineChartOptions = {
+      this.chartOptions = {
         responsive: true,
         elements: {
           line: {
             fill: false
           }
+        },
+        legend: {
+          labels: {
+            fontColor: "#ccc"
+          }
+        },
+        title: {
+          fontColor: "#ccc"
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                fontColor: "#ccc"
+              }
+            }
+          ],
+          yAxes: [
+            {
+              position: "left",
+              id: "y-axis-0",
+              ticks: {
+                beginAtZero: true,
+                fontColor: "#ccc"
+              }
+            },
+            {
+              position: "right",
+              id: "y-axis-1",
+              ticks: {
+                max: 100000000,
+                beginAtZero: false,
+                fontColor: "#ccc"
+              }
+            }
+          ]
         }
       };
       this.cd.detectChanges();

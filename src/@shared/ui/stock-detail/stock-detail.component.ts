@@ -9,10 +9,6 @@ import * as Rx from "rxjs";
           *ngIf="data.historical_details"
           [chartData]="data"
         ></app-stock-trend-graph>
-        <app-stock-volume-graph
-          *ngIf="data.historical_details"
-          [chartData]="data"
-        ></app-stock-volume-graph>
       </ng-container>
       <ng-container *ngIf="!(stockData$ | async)">
         <div>No results found</div>
