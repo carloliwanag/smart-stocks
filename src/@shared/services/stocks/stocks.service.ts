@@ -4,9 +4,11 @@ import * as Rx from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import {
+  FOIAList,
+  FOIAResult,
   StockList,
-  StockNamesList,
-  StockNamesResult
+  StockNamesResult,
+  StockSearchList
 } from "./stocks.service.types";
 
 @Injectable({
@@ -40,8 +42,13 @@ export class StocksService {
       .get(`${environment.API_URL}/stock-news/${symbol}`)
       .pipe(
         map((response: any) => {
-          if (response && response.data) {
-            return response.data;
+          if (
+            response &&
+            response.data &&
+            response.data.TOP_NEWS &&
+            response.data.TOP_NEWS.length > 0
+          ) {
+            return response.data.TOP_NEWS;
           }
 
           return undefined;
@@ -51,19 +58,29 @@ export class StocksService {
 
   public getSearchStocksBySymbol(
     symbol: string
-  ): Rx.Observable<StockNamesList> {
-    return this.httpClient
-      .get(`${environment.API_URL}/stock/${symbol}`)
-      .pipe(map((response: StockNamesResult) => response.data));
+  ): Rx.Observable<StockSearchList | undefined> {
+    return this.httpClient.get(`${environment.API_URL}/stock/${symbol}`).pipe(
+      map((response: StockNamesResult) => {
+        if (response.data.length > 0) {
+          return response.data;
+        }
+
+        return undefined;
+      })
+    );
   }
 
+  public getFOIARequestBySymbol(
+    symbol: string
+  ): Rx.Observable<FOIAList | undefined> {
+    return this.httpClient.get(`${environment.API_URL}/foia/${symbol}`).pipe(
+      map((response: FOIAResult) => {
+        if (response.data.length > 0) {
+          return response.data;
+        }
 
-  public getFOIARequestBySymbol(symbol: string): Rx.Observable<any | undefined> {
-    return this.httpClient
-    .get(`${environment.API_URL}/foia/${symbol}`)
-    .pipe(map((response: any) => {
-      console.log('foia data: ', response);
-      return response;
-    }));    
+        return undefined;
+      })
+    );
   }
 }

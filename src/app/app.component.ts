@@ -1,17 +1,22 @@
 import { isDefined } from "@angular/compiler/src/util";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { StocksService } from "@shared/services";
+import { Component, OnInit } from "@angular/core";
+import { StockSearch, StocksService } from "@shared/services";
 import * as Rx from "rxjs";
 import {
   distinctUntilChanged,
   filter,
   map,
+  publishReplay,
+  refCount,
   startWith,
   switchMap,
   tap
 } from "rxjs/operators";
 
-export const DEFAULT_STOCK_SYMBOL = "GOOG";
+export const DEFAULT_STOCK: StockSearch = {
+  ticker: "GOOG",
+  company_name: "Alphabet Inc."
+};
 
 @Component({
   template: `
@@ -29,33 +34,33 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
         >
           <div class="Main-cards" fxFlex="20%">
             <mat-card>
-              <ng-container *ngIf="!isLoadingNews">
+              <ng-container *ngIf="!isLoadingStock">
                 <mat-card-header>
                   <mat-card-title>News</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-stock-news [stockData$]="searchNews$"></app-stock-news>
+                  <app-stock-news [stockData$]="stock$"></app-stock-news>
                 </mat-card-content>
               </ng-container>
               <mat-spinner
                 class="Main-spinner"
-                *ngIf="isLoadingNews"
+                *ngIf="isLoadingStock"
                 [color]="'accent'"
                 [diameter]="50"
               ></mat-spinner>
             </mat-card>
             <mat-card>
-              <ng-container *ngIf="!isLoadingFOIA">
+              <ng-container *ngIf="!isLoadingStock">
                 <mat-card-header>
                   <mat-card-title>FOIA Requests</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-stock-foia [stockData$]="searchFOIA$"></app-stock-foia>
+                  <app-stock-foia [stockData$]="stock$"></app-stock-foia>
                 </mat-card-content>
               </ng-container>
               <mat-spinner
                 class="Main-spinner"
-                *ngIf="isLoadingFOIA"
+                *ngIf="isLoadingStock"
                 [color]="'accent'"
                 [diameter]="50"
               >
@@ -64,21 +69,19 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
           </div>
           <div class="Main-cards" fxFlex="50%">
             <mat-card>
-              <ng-container *ngIf="!isLoadingStocks">
+              <ng-container *ngIf="!isLoadingStock">
                 <mat-card-header>
                   <mat-card-title
                     >{{ currentStockSymbol }} Historical Details</mat-card-title
                   >
                 </mat-card-header>
                 <mat-card-content>
-                  <app-stock-detail
-                    [stockData$]="searchStock$"
-                  ></app-stock-detail>
+                  <app-stock-detail [stockData$]="stock$"></app-stock-detail>
                 </mat-card-content>
               </ng-container>
               <mat-spinner
                 class="Main-spinner"
-                *ngIf="isLoadingStocks"
+                *ngIf="isLoadingStock"
                 [color]="'accent'"
                 [diameter]="50"
               ></mat-spinner>
@@ -86,8 +89,8 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
           </div>
           <div class="Main-cards" fxFlex="30%">
             <app-stock-helper
-              [busy]="isLoadingStocks"
-              [stockData$]="searchStock$"
+              [busy]="isLoadingStock"
+              [stockData$]="stock$"
             ></app-stock-helper>
           </div>
         </section>
@@ -97,106 +100,52 @@ export const DEFAULT_STOCK_SYMBOL = "GOOG";
   selector: "app-root",
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements OnInit, OnDestroy {
-  searchStockResultSubject = new Rx.BehaviorSubject(undefined);
-  searchNewsSubject = new Rx.BehaviorSubject(undefined);
-  searchStockSubject = new Rx.BehaviorSubject(undefined);
-  searchFOIASubject = new Rx.BehaviorSubject(undefined);
-
-  searchStockResult$: Rx.Observable<string>;
-  searchNews$ = this.searchNewsSubject.asObservable();
-  searchStock$ = this.searchStockSubject.asObservable();
-  searchFOIA$ = this.searchFOIASubject.asObservable();
-
-  currentStockSymbol: string;
-  isLoadingStocks = false;
-  isLoadingNews = false;
-  isLoadingFOIA = false;
-
-  searchStockSubscription: Rx.Subscription;
-  searchNewsSubscription: Rx.Subscription;
-  searchFOIASubscription: Rx.Subscription;
+export class AppComponent implements OnInit {
+  stockSubject = new Rx.BehaviorSubject<StockSearch>(undefined);
+  stock$: Rx.Observable<any>;
+  isLoadingStock = true;
 
   constructor(private stocksService: StocksService) {}
 
   ngOnInit() {
-    this.searchStockResult$ = this.searchStockResultSubject.asObservable().pipe(
-      startWith(DEFAULT_STOCK_SYMBOL),
+    this.stock$ = this.stockSubject.asObservable().pipe(
+      startWith(DEFAULT_STOCK),
       filter(isDefined),
       distinctUntilChanged(),
-      tap(symbol => {
-        this.currentStockSymbol = symbol;
-      })
-    );
+      tap(() => {
+        this.isLoadingStock = true;
+      }),
+      switchMap((stock: StockSearch) =>
+        Rx.zip(
+          this.stocksService.getByStockSymbol(stock.ticker),
+          this.stocksService.getNewsByStockSymbol(stock.ticker),
+          this.stocksService.getFOIARequestBySymbol(stock.company_name),
+          Rx.of(stock)
+        ).pipe(
+          map(([stock, news, foia, stockSearch]) => {
+            if (!stock || !news || !foia) {
+              return undefined;
+            }
 
-    this.searchStockSubscription = this.searchStockResult$
-      .pipe(
-        tap(() => {
-          this.isLoadingStocks = true;
-        }),
-        switchMap(symbol => this.stocksService.getByStockSymbol(symbol)),
-        map(data => {
-          if (data) {
             return {
-              ...data,
-              symbol: this.currentStockSymbol
+              foia,
+              news,
+              ...stock,
+              stock_code: stockSearch.ticker,
+              company_name: stockSearch.company_name
             };
-          }
-
-          return undefined;
-        }),
-        tap(() => {
-          this.isLoadingStocks = false;
-        })
-      )
-      .subscribe(data => this.searchStockSubject.next(data));
-
-    this.searchNewsSubscription = this.searchStockResult$
-      .pipe(
-        tap(() => {
-          this.isLoadingNews = true;
-        }),
-        switchMap(symbol => this.stocksService.getNewsByStockSymbol(symbol)),
-        map(data => {
-          if (data && data.TOP_NEWS.length > 0) {
-            return data.TOP_NEWS;
-          }
-
-          return undefined;
-        }),
-        tap(() => {
-          this.isLoadingNews = false;
-        })
-      )
-      .subscribe(data => this.searchNewsSubject.next(data));
-
-    this.searchFOIASubscription = this.searchStockResult$
-      .pipe(
-        tap(() => {
-          this.isLoadingFOIA = true;
-        }),
-        switchMap(symbol => this.stocksService.getFOIARequestBySymbol(symbol)),
-        map(data => {
-          if (data && data.data.length > 0) {
-            return data.data;
-          }
-          return undefined;
-        }),
-        tap(() => {
-          this.isLoadingFOIA = false;
-        })
-      )
-      .subscribe(data => this.searchFOIASubject.next(data));
+          })
+        )
+      ),
+      tap(() => {
+        this.isLoadingStock = false;
+      }),
+      publishReplay(1),
+      refCount()
+    );
   }
 
-  ngOnDestroy() {
-    if (this.searchStockSubscription) {
-      this.searchStockSubscription.unsubscribe();
-    }
-  }
-
-  onSearchBlur(keyword: string) {
-    this.currentStockSymbol = keyword;
-    this.searchStockResultSubject.next(keyword);
+  onSearchBlur(stock: StockSearch) {
+    this.stockSubject.next(stock);
   }
 }

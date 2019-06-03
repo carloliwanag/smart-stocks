@@ -17,7 +17,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { StockNamesList, StocksService } from "@shared/services";
+import { StockSearch, StockSearchList, StocksService } from "@shared/services";
 import * as Rx from "rxjs";
 import {
   debounceTime,
@@ -29,7 +29,7 @@ import {
 
 @Component({
   template: `
-    <form searchForm="ngForm" (ngSubmit)="blurEvent()">
+    <form searchForm="ngForm">
       <mat-form-field
         placeholder="Search"
         class="mat-search_field"
@@ -39,7 +39,6 @@ import {
           #input
           matInput
           type="text"
-          (blur)="blurEvent()"
           [formControl]="searchText"
           [matAutocomplete]="auto"
           value="GOOG"
@@ -48,7 +47,7 @@ import {
         <mat-autocomplete
           autoActiveFirstOption
           #auto="matAutocomplete"
-          (optionSelected)="blurEvent()"
+          (optionSelected)="selectStock($event.option.value)"
         >
           <ng-container *ngIf="!isLoading">
             <mat-option
@@ -89,12 +88,12 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavSearchComponent implements OnInit, OnDestroy {
-  @Output() onBlur = new EventEmitter<string>();
+  @Output() onBlur = new EventEmitter<StockSearch>();
 
   @ViewChild("input") inputElement: ElementRef;
 
   isLoading = false;
-  stockList: StockNamesList = [];
+  stockList: StockSearchList = [];
   searchText = new FormControl();
   searchText$: Rx.Observable<any>;
   searchVisible = true;
@@ -137,6 +136,7 @@ export class NavSearchComponent implements OnInit, OnDestroy {
   }
 
   close() {
+    this.searchText.setValue("");
     this.searchVisible = false;
   }
 
@@ -145,11 +145,11 @@ export class NavSearchComponent implements OnInit, OnDestroy {
     this.inputElement.nativeElement.focus();
   }
 
-  blurEvent() {
-    if (!this.searchText.value) {
-      return this.close();
-    }
+  selectStock(stockCode: string) {
+    const stock = this.stockList.find(stock => stock.ticker === stockCode);
 
-    this.onBlur.emit(this.searchText.value);
+    if (stock) {
+      this.onBlur.emit(stock);
+    }
   }
 }

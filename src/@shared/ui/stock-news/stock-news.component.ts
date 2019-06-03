@@ -4,9 +4,9 @@ import * as Rx from "rxjs";
 @Component({
   template: `
     <mat-list class="StockNews">
-      <ng-container *ngIf="stockData$ | async as stockNews">
+      <ng-container *ngIf="stockData$ | async as stock">
         <perfect-scrollbar class="StockNews-list">
-          <mat-list-item *ngFor="let news of stockNews; last as last">
+          <mat-list-item *ngFor="let news of stock.news; last as last">
             <p>{{ news }}</p>
             <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
           </mat-list-item>

@@ -14,6 +14,7 @@ import { BaseChartDirective, Label } from "ng2-charts";
   template: `
     <section>
       <canvas
+        *ngIf="chartData"
         baseChart
         width="300"
         height="200"
@@ -40,7 +41,7 @@ export class StockSummaryGraphComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartData) {
+    if (changes.chartData && changes.chartData.currentValue) {
       const data = this.chartData.summery;
 
       this.lineChartData = [

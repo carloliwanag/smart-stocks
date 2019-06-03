@@ -8,7 +8,7 @@ import * as Rx from "rxjs";
     <table
       *ngIf="stockData$ | async as tableData; else noData"
       mat-table
-      [dataSource]="tableData"
+      [dataSource]="tableData.foia"
       matSort
       class="Foia"
     >

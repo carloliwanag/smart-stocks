@@ -51,7 +51,7 @@ export class StockFinanceDetailsComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.data) {
+    if (changes.data && changes.data.currentValue) {
       this.prepareData();
     }
   }
