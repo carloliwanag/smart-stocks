@@ -52,11 +52,9 @@ export class StockTrendGraphComponent implements OnChanges {
         const previous = parseFloat(prev);
         const current = parseFloat(cur);
 
-        console.log(previous, current, previous > current);
+        // initial value
         if (volumeBackgroundColor.length <= 0) {
-          volumeBackgroundColor.push(
-            previous >= current ? HIGH_VOLUME_COLOR : LOW_VOLUME_COLOR
-          );
+          volumeBackgroundColor.push(HIGH_VOLUME_COLOR);
         }
 
         volumeBackgroundColor.push(
