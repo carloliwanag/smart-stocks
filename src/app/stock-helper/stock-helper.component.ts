@@ -17,36 +17,7 @@ import * as Rx from "rxjs";
           [color]="'accent'"
           [diameter]="50"
         ></mat-spinner>
-      </mat-card>
-      <mat-card>
-        <ng-container *ngIf="!busy">
-          <mat-card-header>
-            <mat-card-title>Finance Details</mat-card-title>
-          </mat-card-header>
-          <app-stock-finance-details [data]="data"></app-stock-finance-details>
-        </ng-container>
-        <mat-spinner
-          class="StockHelper-spinner"
-          *ngIf="busy"
-          [color]="'accent'"
-          [diameter]="50"
-        ></mat-spinner>
-      </mat-card>
-
-      <mat-card>
-        <ng-container *ngIf="!busy">
-          <mat-card-header>
-            <mat-card-title>Statistics</mat-card-title>
-          </mat-card-header>
-          <app-stock-statistics [data]="data"></app-stock-statistics>
-        </ng-container>
-        <mat-spinner
-          class="StockHelper-spinner"
-          *ngIf="busy"
-          [color]="'accent'"
-          [diameter]="50"
-        ></mat-spinner>
-      </mat-card>
+      </mat-card>          
     </section>
   `,
   selector: "app-stock-helper",
