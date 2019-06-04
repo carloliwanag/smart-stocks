@@ -209,17 +209,4 @@ export class StockTrendGraphComponent implements OnChanges {
       this.cd.detectChanges();
     }
   }
-
-  private getAveragePriceArray() {
-    if (!this.chartData.historical_details) {
-      return [];
-    }
-
-    const low = this.chartData.historical_details.Low;
-    const high = this.chartData.historical_details.High;
-
-    low.forEach((element, index) => {
-      console.log(element, index);
-    });
-  }
 }
