@@ -86,6 +86,22 @@ export class StockTrendGraphComponent implements OnChanges {
         })
         .filter(item => typeof item !== "undefined");
 
+      const news = this.chartData.news
+        .map(element => {
+          const dateIndex = this.chartLabels.findIndex(
+            date => date === element.receiveddate
+          );
+
+          if (dateIndex !== -1) {
+            return {
+              x: this.chartLabels[dateIndex],
+              y: lowData[dateIndex],
+              r: sentimentRadius[dateIndex]
+            };
+          }
+        })
+        .filter(item => typeof item !== "undefined");
+
       volumeData.reduce((prev, cur) => {
         const previous = parseFloat(prev);
         const current = parseFloat(cur);
@@ -113,7 +129,14 @@ export class StockTrendGraphComponent implements OnChanges {
           type: "bubble",
           label: "FOIA",
           backgroundColor: "#fff",
-          borderColor: "#fff"
+          borderColor: "#fff",
+          hoverBackgroundColor: "#fff",
+          hoverBorderColor: "#fff"
+        },
+        {
+          data: news,
+          type: "bubble",
+          label: "News"
         },
         {
           data: lowData,
@@ -156,6 +179,7 @@ export class StockTrendGraphComponent implements OnChanges {
         scales: {
           xAxes: [
             {
+              type: "time",
               ticks: {
                 fontColor: DEFAULT_FONT_COLOR
               }
