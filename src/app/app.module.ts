@@ -15,6 +15,7 @@ import {
   MatSidenavModule,
   MatToolbarModule
 } from "@angular/material";
+import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UiModule } from "@shared/ui";
@@ -44,6 +45,7 @@ import { StockHelperComponent } from "./stock-helper/stock-helper.component";
     MatListModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    MatTabsModule,
     UiModule
   ],
   bootstrap: [AppComponent]

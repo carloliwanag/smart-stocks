@@ -52,6 +52,23 @@ export const DEFAULT_STOCK: StockSearch = {
                 [diameter]="50"
               ></mat-spinner>
             </mat-card>
+            <mat-card *ngIf="!isLoadingStock">
+              <mat-card-header>
+                <mat-card-title>Technical Details</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-tab-group [dynamicHeight]="true">
+                  <mat-tab label="Financial">
+                    <app-stock-finance-details [data]="stock$ | async">
+                    </app-stock-finance-details>
+                  </mat-tab>
+                  <mat-tab label="Statistics">
+                    <app-stock-statistics [data]="stock$ | async"></app-stock-statistics>
+                  </mat-tab>
+                  <mat-tab label="Third"> Content 3 </mat-tab>
+                </mat-tab-group>
+              </mat-card-content>
+            </mat-card>
           </div>
           <div class="Main-cards" fxFlex="30%">
             <app-stock-helper
