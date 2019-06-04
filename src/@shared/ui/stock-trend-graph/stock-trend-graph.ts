@@ -13,6 +13,9 @@ import { BaseChartDirective, Label } from "ng2-charts";
 const DEFAULT_FONT_COLOR = "#ccc";
 const LOW_VOLUME_COLOR = "#d9534f";
 const HIGH_VOLUME_COLOR = "#5cb85c";
+const BUBBLE_RADIUS_SMALL = 5;
+const BUBBLE_RADIUS_HIGH = 10;
+const BUBBLE_RADIUS_DEFAULT = 8;
 
 @Component({
   template: `
@@ -43,10 +46,45 @@ export class StockTrendGraphComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartData) {
-      const historicData = this.chartData.historical_details;
-      const volumeData = historicData.map(details => details.Volume).reverse();
+    if (changes.chartData && changes.chartData.currentValue) {
+      const historicData = this.chartData.historical_details.reverse();
+      const volumeData = historicData.map(details => details.Volume);
+      const lowData = historicData.map(details => details.Low);
       const volumeBackgroundColor = [];
+      const sentimentRadius = [];
+      let maxVolume = 0;
+
+      this.chartLabels = historicData.map(details => details.fetchdate);
+
+      historicData
+        .map(details => (details.Low + details.High) / 2)
+        .reduce((prev, cur) => {
+          sentimentRadius.push(
+            prev <= cur ? BUBBLE_RADIUS_HIGH : BUBBLE_RADIUS_SMALL
+          );
+
+          if (sentimentRadius.length === historicData.length - 1) {
+            sentimentRadius.push(BUBBLE_RADIUS_DEFAULT);
+          }
+
+          return cur;
+        });
+
+      const foia = this.chartData.foia
+        .map(element => {
+          const dateIndex = this.chartLabels.findIndex(
+            date => date === element.receiveddate
+          );
+
+          if (dateIndex !== -1) {
+            return {
+              x: this.chartLabels[dateIndex],
+              y: lowData[dateIndex],
+              r: sentimentRadius[dateIndex]
+            };
+          }
+        })
+        .filter(item => typeof item !== "undefined");
 
       volumeData.reduce((prev, cur) => {
         const previous = parseFloat(prev);
@@ -55,15 +93,40 @@ export class StockTrendGraphComponent implements OnChanges {
         // initial value
         if (volumeBackgroundColor.length <= 0) {
           volumeBackgroundColor.push(HIGH_VOLUME_COLOR);
+          maxVolume = previous;
         }
 
         volumeBackgroundColor.push(
           current >= previous ? HIGH_VOLUME_COLOR : LOW_VOLUME_COLOR
         );
+
+        if (maxVolume < current) {
+          maxVolume = current;
+        }
+
         return current;
       });
 
       this.chartDataSet = [
+        {
+          data: foia,
+          type: "bubble",
+          label: "FOIA",
+          backgroundColor: "#fff",
+          borderColor: "#fff"
+        },
+        {
+          data: lowData,
+          label: "Low",
+          type: "line",
+          yAxisID: "y-axis-0"
+        },
+        {
+          data: historicData.map(details => details.High),
+          label: "High",
+          yAxisID: "y-axis-0",
+          type: "line"
+        },
         {
           data: volumeData,
           label: "Volume",
@@ -72,24 +135,9 @@ export class StockTrendGraphComponent implements OnChanges {
           hoverBackgroundColor: volumeBackgroundColor,
           borderColor: volumeBackgroundColor,
           hoverBorderColor: volumeBackgroundColor
-        },
-        {
-          data: historicData.map(details => details.Low).reverse(),
-          label: "Low",
-          type: "line",
-          yAxisID: "y-axis-0"
-        },
-        {
-          data: historicData.map(details => details.High).reverse(),
-          label: "High",
-          yAxisID: "y-axis-0",
-          type: "line"
         }
       ];
 
-      this.chartLabels = historicData
-        .map(details => details.fetchdate)
-        .reverse();
       this.chartOptions = {
         responsive: true,
         elements: {
@@ -126,8 +174,8 @@ export class StockTrendGraphComponent implements OnChanges {
               position: "right",
               id: "y-axis-1",
               ticks: {
-                max: 100000000,
-                beginAtZero: false,
+                max: Math.round(maxVolume * 2.5), // 100000000,
+                beginAtZero: true,
                 fontColor: DEFAULT_FONT_COLOR
               }
             }
@@ -136,5 +184,18 @@ export class StockTrendGraphComponent implements OnChanges {
       };
       this.cd.detectChanges();
     }
+  }
+
+  private getAveragePriceArray() {
+    if (!this.chartData.historical_details) {
+      return [];
+    }
+
+    const low = this.chartData.historical_details.Low;
+    const high = this.chartData.historical_details.High;
+
+    low.forEach((element, index) => {
+      console.log(element, index);
+    });
   }
 }

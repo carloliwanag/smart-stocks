@@ -8,6 +8,7 @@ import {
   FOIAResult,
   StockList,
   StockNamesResult,
+  StockNewsList,
   StockSearchList
 } from "./stocks.service.types";
 
@@ -37,7 +38,9 @@ export class StocksService {
       );
   }
 
-  public getNewsByStockSymbol(symbol: string): Rx.Observable<any | undefined> {
+  public getNewsByStockSymbol(
+    symbol: string
+  ): Rx.Observable<StockNewsList | undefined> {
     return this.httpClient
       .get(`${environment.API_URL}/stock-news/${symbol}`)
       .pipe(
@@ -48,7 +51,15 @@ export class StocksService {
             response.data.TOP_NEWS &&
             response.data.TOP_NEWS.length > 0
           ) {
-            return response.data.TOP_NEWS;
+            return response.data.TOP_NEWS.map((news: string) => {
+              const [date, ...title] = news.split(" ");
+
+              return {
+                date,
+                title: title.join(" "),
+                url: ""
+              };
+            });
           }
 
           return undefined;
