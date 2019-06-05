@@ -1,13 +1,21 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
 const DEFAULT_FONT_COLOR = "#ccc";
 const LOW_VOLUME_COLOR = "#d9534f";
 const HIGH_VOLUME_COLOR = "#5cb85c";
-const BUBBLE_RADIUS_SMALL = 5;
-const BUBBLE_RADIUS_HIGH = 10;
-const BUBBLE_RADIUS_DEFAULT = 8;
+const BUBBLE_RADIUS_SMALL = 4;
+const BUBBLE_RADIUS_HIGH = 8;
+const BUBBLE_RADIUS_DEFAULT = 6;
 
 @Component({
   template: `
@@ -48,19 +56,20 @@ export class StockTrendGraphComponent implements OnChanges {
 
       this.chartLabels = historicData.map(details => details.fetchdate);
 
-      historicData
-        .map(details => (details.Low + details.High) / 2)
-        .reduce((prev, cur) => {
-          sentimentRadius.push(
-            prev <= cur ? BUBBLE_RADIUS_HIGH : BUBBLE_RADIUS_SMALL
-          );
+      lowData.reduce((prev, cur) => {
+        const previous = parseInt(prev, 10);
+        const current = parseInt(cur, 10);
 
-          if (sentimentRadius.length === historicData.length - 1) {
-            sentimentRadius.push(BUBBLE_RADIUS_DEFAULT);
-          }
+        sentimentRadius.push(
+          previous <= current ? BUBBLE_RADIUS_HIGH : BUBBLE_RADIUS_SMALL
+        );
 
-          return cur;
-        });
+        if (sentimentRadius.length === historicData.length - 1) {
+          sentimentRadius.push(BUBBLE_RADIUS_DEFAULT);
+        }
+
+        return cur;
+      });
 
       const foia = this.chartData.foia
         .map(element => {
@@ -132,15 +141,9 @@ export class StockTrendGraphComponent implements OnChanges {
         },
         {
           data: lowData,
-          label: "Low",
+          label: "Price",
           type: "line",
           yAxisID: "y-axis-0"
-        },
-        {
-          data: historicData.map(details => details.High),
-          label: "High",
-          yAxisID: "y-axis-0",
-          type: "line"
         },
         {
           data: volumeData,
