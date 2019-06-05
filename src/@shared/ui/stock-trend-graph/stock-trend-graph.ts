@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild
-} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
@@ -179,7 +171,6 @@ export class StockTrendGraphComponent implements OnChanges {
         scales: {
           xAxes: [
             {
-              type: "time",
               ticks: {
                 fontColor: DEFAULT_FONT_COLOR
               }
