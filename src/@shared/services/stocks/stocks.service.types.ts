@@ -32,3 +32,18 @@ export interface StockNews {
   url: string;
 }
 export type StockNewsList = ReadonlyArray<StockNews>;
+
+export interface StockSentimentResult {
+  data: StockSentiments;
+}
+
+export interface StockSentiments {
+  news_sentiment: ReadonlyArray<StockSentiment>;
+  special_sentiment_102: ReadonlyArray<StockSentiment>;
+  general_sentiment: ReadonlyArray<StockSentiment>;
+}
+
+export interface StockSentiment {
+  date: string;
+  overall_sentiment: number;
+}

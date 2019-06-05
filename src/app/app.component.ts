@@ -63,7 +63,9 @@ export const DEFAULT_STOCK: StockSearch = {
                     </app-stock-finance-details>
                   </mat-tab>
                   <mat-tab label="Statistics">
-                    <app-stock-statistics [data]="stock$ | async"></app-stock-statistics>
+                    <app-stock-statistics
+                      [data]="stock$ | async"
+                    ></app-stock-statistics>
                   </mat-tab>
                   <mat-tab label="Third"> Content 3 </mat-tab>
                 </mat-tab-group>
@@ -103,9 +105,10 @@ export class AppComponent implements OnInit {
           this.stocksService.getByStockSymbol(stock.ticker),
           this.stocksService.getNewsByStockSymbol(stock.ticker),
           this.stocksService.getFOIARequestBySymbol(stock.company_name),
+          this.stocksService.getSentimentBySymbol(stock.ticker),
           Rx.of(stock)
         ).pipe(
-          map(([stock, news, foia, stockSearch]) => {
+          map(([stock, news, foia, sentiments, stockSearch]) => {
             if (!stock || !news || !foia) {
               return undefined;
             }
@@ -114,6 +117,7 @@ export class AppComponent implements OnInit {
               foia,
               news,
               ...stock,
+              ...sentiments,
               stock_code: stockSearch.ticker,
               company_name: stockSearch.company_name
             };

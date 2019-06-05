@@ -13,6 +13,8 @@ import { BaseChartDirective, Label } from "ng2-charts";
 const DEFAULT_FONT_COLOR = "#ccc";
 const LOW_VOLUME_COLOR = "#d9534f";
 const HIGH_VOLUME_COLOR = "#5cb85c";
+const LOW_SENTIMENT_COLOR = "#e2706c";
+const HIGH_SENTIMENT_COLOR = "#54ce7b";
 const BUBBLE_RADIUS_SMALL = 4;
 const BUBBLE_RADIUS_HIGH = 8;
 const BUBBLE_RADIUS_DEFAULT = 6;
@@ -53,6 +55,7 @@ export class StockTrendGraphComponent implements OnChanges {
         parseFloat(details.Low).toFixed(2)
       );
       const volumeBackgroundColor = [];
+      const sentimentBackgroundColor = [];
       const sentimentRadius = [];
       let maxVolume = 0;
 
@@ -132,26 +135,69 @@ export class StockTrendGraphComponent implements OnChanges {
         return current;
       });
 
+      const sentiments = this.chartData.general_sentiment
+        .map(element => {
+          const dateIndex = this.chartLabels.findIndex(
+            date => date === element.date
+          );
+
+          if (dateIndex !== -1) {
+            sentimentBackgroundColor.push(
+              parseInt(element.overall_sentiment) < 0
+                ? LOW_SENTIMENT_COLOR
+                : HIGH_SENTIMENT_COLOR
+            );
+
+            return {
+              x: this.chartLabels[dateIndex],
+              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+              r: BUBBLE_RADIUS_DEFAULT,
+              value: element.overall_sentiment,
+              label: "Sentiment",
+              title: this.chartLabels[dateIndex]
+            };
+          }
+        })
+        .filter(item => typeof item !== "undefined");
+
       this.chartDataSet = [
         {
           data: foia,
           type: "bubble",
           label: "FOIA",
-          backgroundColor: "#fff",
-          borderColor: "#fff",
-          hoverBackgroundColor: "#fff",
-          hoverBorderColor: "#fff"
+          backgroundColor: "#c6c0c0",
+          borderColor: "#ede6e6",
+          hoverBackgroundColor: "#c6c0c0",
+          hoverBorderColor: "#ede6e6"
         },
         {
           data: news,
           type: "bubble",
-          label: "News"
+          label: "News",
+          backgroundColor: "#ddd763",
+          borderColor: "#eae475",
+          hoverBackgroundColor: "#ddd763",
+          hoverBorderColor: "#eae475"
+        },
+        {
+          data: sentiments,
+          type: "bubble",
+          label: "Sentiments",
+          backgroundColor: sentimentBackgroundColor,
+          borderColor: sentimentBackgroundColor,
+          hoverBackgroundColor: sentimentBackgroundColor,
+          hoverBorderColor: sentimentBackgroundColor
         },
         {
           data: lowData,
           label: "Price",
           type: "line",
-          yAxisID: "y-axis-0"
+          yAxisID: "y-axis-0",
+          pointRadius: 3,
+          backgroundColor: "#3470d3",
+          borderColor: "#5589e0",
+          hoverBackgroundColor: "#3470d3",
+          hoverBorderColor: "#5589e0"
         },
         {
           data: volumeData,

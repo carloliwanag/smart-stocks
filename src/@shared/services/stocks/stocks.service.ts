@@ -9,7 +9,9 @@ import {
   StockList,
   StockNamesResult,
   StockNewsList,
-  StockSearchList
+  StockSearchList,
+  StockSentimentResult,
+  StockSentiments
 } from "./stocks.service.types";
 
 @Injectable({
@@ -93,5 +95,21 @@ export class StocksService {
         return undefined;
       })
     );
+  }
+
+  public getSentimentBySymbol(
+    symbol: string
+  ): Rx.Observable<StockSentiments | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-sentiment/${symbol}`)
+      .pipe(
+        map((response: StockSentimentResult) => {
+          if (response.data.general_sentiment) {
+            return response.data;
+          }
+
+          return undefined;
+        })
+      );
   }
 }
