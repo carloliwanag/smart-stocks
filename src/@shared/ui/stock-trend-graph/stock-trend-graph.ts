@@ -184,9 +184,9 @@ export class StockTrendGraphComponent implements OnChanges {
           type: "bubble",
           label: "Sentiments",
           backgroundColor: sentimentBackgroundColor,
-          borderColor: sentimentBackgroundColor,
+          borderColor: "#fff",
           hoverBackgroundColor: sentimentBackgroundColor,
-          hoverBorderColor: sentimentBackgroundColor
+          hoverBorderColor: "#fff"
         },
         {
           data: lowData,
