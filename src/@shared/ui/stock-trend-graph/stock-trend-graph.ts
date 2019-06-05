@@ -49,7 +49,9 @@ export class StockTrendGraphComponent implements OnChanges {
     if (changes.chartData && changes.chartData.currentValue) {
       const historicData = this.chartData.historical_details.reverse();
       const volumeData = historicData.map(details => details.Volume);
-      const lowData = historicData.map(details => details.Low);
+      const lowData = historicData.map(details =>
+        parseFloat(details.Low).toFixed(2)
+      );
       const volumeBackgroundColor = [];
       const sentimentRadius = [];
       let maxVolume = 0;
@@ -81,7 +83,10 @@ export class StockTrendGraphComponent implements OnChanges {
             return {
               x: this.chartLabels[dateIndex],
               y: lowData[dateIndex],
-              r: sentimentRadius[dateIndex]
+              r: sentimentRadius[dateIndex],
+              value: element.requestername,
+              label: "Requester Name",
+              title: this.chartLabels[dateIndex]
             };
           }
         })
@@ -90,14 +95,17 @@ export class StockTrendGraphComponent implements OnChanges {
       const news = this.chartData.news
         .map(element => {
           const dateIndex = this.chartLabels.findIndex(
-            date => date === element.receiveddate
+            date => date === element.date
           );
 
           if (dateIndex !== -1) {
             return {
               x: this.chartLabels[dateIndex],
               y: lowData[dateIndex],
-              r: sentimentRadius[dateIndex]
+              r: sentimentRadius[dateIndex],
+              value: element.title,
+              label: "News",
+              title: this.chartLabels[dateIndex]
             };
           }
         })
@@ -198,6 +206,37 @@ export class StockTrendGraphComponent implements OnChanges {
               }
             }
           ]
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem, data) => {
+              const toolTip = tooltipItem[0];
+              const datasetIndex = toolTip.datasetIndex;
+              const index = toolTip.index;
+              const activeItem = data.datasets[datasetIndex];
+
+              switch (activeItem.type) {
+                case "bubble":
+                  return (activeItem.data[index] as any).title;
+                default:
+                  return toolTip.xLabel;
+              }
+            },
+            label: function(tooltipItem, data) {
+              const datasetIndex = tooltipItem.datasetIndex;
+              const index = tooltipItem.index;
+              const activeItem = data.datasets[datasetIndex];
+
+              switch (activeItem.type) {
+                case "bubble":
+                  return ` ${(activeItem.data[index] as any).label}: ${
+                    (activeItem.data[index] as any).value
+                  }`;
+                default:
+                  return ` ${activeItem.label}: ${activeItem.data[index]}`;
+              }
+            }
+          }
         }
       };
       this.cd.detectChanges();
