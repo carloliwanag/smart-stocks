@@ -71,7 +71,10 @@ export const DEFAULT_STOCK: StockSearch = {
                   [data]="stock$ | async"
                 ></app-stock-statistics>
               </mat-tab>
-              <mat-tab label="Third"> Content 3 </mat-tab>
+              <mat-tab label="News"> 
+                <app-stock-news [stockData$]="stock$ | async">
+                </app-stock-news>
+              </mat-tab>
             </mat-tab-group>
           </mat-card-content>
         </mat-card>
@@ -135,6 +138,7 @@ export class StockDisplayComponent implements OnInit {
       ),
       tap(() => {
         this.isLoadingStock = false;
+        console.log(this.stock$);
       }),
       publishReplay(1),
       refCount()
