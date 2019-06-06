@@ -159,8 +159,8 @@ export class StockTrendGraphComponent implements OnChanges {
           }
         })
         .filter(item => typeof item !== "undefined");
-      
-        const specialSentiments = this.chartData.special_sentiment_102
+
+      const specialSentiments = this.chartData.special_sentiment_102
         .map(element => {
           const dateIndex = this.chartLabels.findIndex(
             date => date === element.date
@@ -184,7 +184,7 @@ export class StockTrendGraphComponent implements OnChanges {
           }
         })
         .filter(item => typeof item !== "undefined");
-      
+
       const newsSentiments = this.chartData.news_sentiment
         .map(element => {
           const dateIndex = this.chartLabels.findIndex(
@@ -258,7 +258,7 @@ export class StockTrendGraphComponent implements OnChanges {
           borderColor: "#fff",
           hoverBackgroundColor: sentimentBackgroundColor,
           hoverBorderColor: "#fff"
-        },        
+        },
         {
           data: lowData,
           label: "Price",

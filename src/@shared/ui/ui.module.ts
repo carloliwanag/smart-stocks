@@ -20,13 +20,14 @@ import {
 } from "ngx-perfect-scrollbar";
 import { NavSearchComponent } from "./nav-search";
 import { StockFinanceDetailsComponent } from "./stock-finance-details";
+import { StockFoiaComponent } from "./stock-foia";
 import { StockNewsComponent } from "./stock-news";
 import { StockQuoteComponent } from "./stock-quote";
+import { StockSentimentComponent } from "./stock-sentiment";
 import { StockStatisticsComponent } from "./stock-statistics";
 import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
-import { StockFoiaComponent } from "./stock-foia";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -37,13 +38,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavSearchComponent,
     StockDetailComponent,
     StockFinanceDetailsComponent,
-    StockTrendGraphComponent,
-    StockVolumeGraphComponent,
+    StockFoiaComponent,
     StockNewsComponent,
     StockQuoteComponent,
+    StockSentimentComponent,
     StockStatisticsComponent,
     StockSummaryGraphComponent,
-    StockFoiaComponent
+    StockTrendGraphComponent,
+    StockVolumeGraphComponent
   ],
   imports: [
     ChartsModule,
@@ -65,12 +67,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockDetailComponent,
     StockFinanceDetailsComponent,
     StockTrendGraphComponent,
-    StockVolumeGraphComponent,
-    StockNewsComponent,
     StockQuoteComponent,
     StockStatisticsComponent,
-    StockSummaryGraphComponent,
-    StockFoiaComponent
+    StockSentimentComponent
   ],
   providers: [
     {

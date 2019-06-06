@@ -229,3 +229,7 @@ perfect-scrollbar > .ps.ps--scrolling-x > .ps__rail-x {
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
   background-color: #bcbcbc !important;
 }
+
+.mat-toolbar {
+  overflow: hidden !important;
+}

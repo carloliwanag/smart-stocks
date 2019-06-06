@@ -1,51 +1,37 @@
-import { LayoutModule } from "@angular/cdk/layout";
+import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import {
   MatButtonModule,
-  MatCardModule,
   MatFormFieldModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
-  MatProgressSpinnerModule,
   MatSidenavModule,
   MatToolbarModule
 } from "@angular/material";
-import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UiModule } from "@shared/ui";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { MainNavComponent } from "./main-nav/main-nav.component";
-import { StockHelperComponent } from "./stock-helper/stock-helper.component";
 
 @NgModule({
-  declarations: [AppComponent, MainNavComponent, StockHelperComponent],
+  declarations: [AppComponent, MainNavComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
-    FormsModule,
+    CommonModule,
     HttpClientModule,
-    LayoutModule,
-    MatCardModule,
     MatFormFieldModule,
-    MatGridListModule,
     MatInputModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule,
-    MatProgressSpinnerModule,
     ReactiveFormsModule,
-    MatTabsModule,
     UiModule
   ],
   bootstrap: [AppComponent]

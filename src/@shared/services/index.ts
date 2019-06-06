@@ -1,1 +1,2 @@
-export * from './stocks';
+export * from "./nav-search";
+export * from "./stocks";

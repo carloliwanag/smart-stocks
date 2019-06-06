@@ -1,13 +1,14 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { NavSearchService } from "@shared/services";
 import * as Rx from "rxjs";
 import { map } from "rxjs/operators";
 
 @Component({
   template: `
     <mat-toolbar color="primary" class="MainNav">
-      <img src="assets/logo.png" class="logo"> 
-      <span>R2R Analytics</span>      
+      <img src="assets/logo.png" class="logo" />
+      <span>R2R Analytics</span>
       <span class="MainNav-spacer"></span>
       <app-nav-search (onBlur)="searchBlur($event)"></app-nav-search>
       <mat-icon>home</mat-icon>
@@ -18,11 +19,12 @@ import { map } from "rxjs/operators";
   styleUrls: ["./main-nav.component.scss"]
 })
 export class MainNavComponent implements OnInit {
-  @Output() onSearchBlur = new EventEmitter<string>();
-
   isHandset$: Rx.Observable<boolean>;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private navSearchService: NavSearchService
+  ) {}
 
   ngOnInit() {
     this.isHandset$ = this.breakpointObserver
@@ -31,6 +33,6 @@ export class MainNavComponent implements OnInit {
   }
 
   searchBlur(keyword: string) {
-    this.onSearchBlur.emit(keyword);
+    this.navSearchService.setSearchString(keyword);
   }
 }

@@ -17,7 +17,7 @@ import * as Rx from "rxjs";
           [color]="'accent'"
           [diameter]="50"
         ></mat-spinner>
-      </mat-card>          
+      </mat-card>
     </section>
   `,
   selector: "app-stock-helper",
