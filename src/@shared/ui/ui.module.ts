@@ -69,7 +69,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockTrendGraphComponent,
     StockQuoteComponent,
     StockStatisticsComponent,
-    StockSentimentComponent
+    StockSentimentComponent,
+    StockNewsComponent
   ],
   providers: [
     {
