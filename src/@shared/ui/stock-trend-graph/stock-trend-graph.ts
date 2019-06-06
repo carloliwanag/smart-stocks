@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   SimpleChanges,
@@ -13,8 +14,8 @@ import { BaseChartDirective, Label } from "ng2-charts";
 const DEFAULT_FONT_COLOR = "#ccc";
 const LOW_VOLUME_COLOR = "#d9534f";
 const HIGH_VOLUME_COLOR = "#5cb85c";
-const LOW_SENTIMENT_COLOR = "#e2706c";
-const HIGH_SENTIMENT_COLOR = "#54ce7b";
+const LOW_SENTIMENT_COLOR = "rgba(226, 112, 108, 1)"; //"#e2706c";
+const HIGH_SENTIMENT_COLOR = "rgba(84, 206, 123, 1)"; //"#54ce7b";
 const BUBBLE_RADIUS_SMALL = 4;
 const BUBBLE_RADIUS_HIGH = 8;
 const BUBBLE_RADIUS_DEFAULT = 6;
@@ -23,6 +24,7 @@ const BUBBLE_RADIUS_DEFAULT = 6;
   template: `
     <section>
       <canvas
+        #chart
         baseChart
         height="180px"
         [datasets]="chartDataSet"
@@ -44,11 +46,15 @@ export class StockTrendGraphComponent implements OnChanges {
   chartOptions: ChartOptions;
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
+  @ViewChild("chart") canvas: ElementRef;
 
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData && changes.chartData.currentValue) {
+      const gradient = this.canvas.nativeElement
+        .getContext("2d")
+        .createLinearGradient(0, 0, 300, 500);
       const historicData = this.chartData.historical_details.reverse();
       const volumeData = historicData.map(details => details.Volume);
       const lowData = historicData.map(details =>
@@ -57,6 +63,7 @@ export class StockTrendGraphComponent implements OnChanges {
       const volumeBackgroundColor = [];
       const sentimentBackgroundColor = [];
       const sentimentRadius = [];
+      const generalSentimentColor = [];
       let maxVolume = 0;
 
       this.chartLabels = historicData.map(details => details.fetchdate);
@@ -135,80 +142,103 @@ export class StockTrendGraphComponent implements OnChanges {
         return current;
       });
 
-      const generalSentiments = this.chartData.general_sentiment
-        .map(element => {
-          const dateIndex = this.chartLabels.findIndex(
-            date => date === element.date
-          );
+      const generalSentiments = this.chartLabels.map((label, index) => {
+        const dateFoundIndex = this.chartData.general_sentiment.findIndex(
+          item => label === item.date
+        );
+        const value =
+          dateFoundIndex !== -1
+            ? this.chartData.general_sentiment[dateFoundIndex].overall_sentiment
+            : 0;
 
-          if (dateIndex !== -1) {
-            sentimentBackgroundColor.push(
-              parseInt(element.overall_sentiment) < 0
-                ? LOW_SENTIMENT_COLOR
-                : HIGH_SENTIMENT_COLOR
-            );
+        generalSentimentColor.push(
+          value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
+        );
 
-            return {
-              x: this.chartLabels[dateIndex],
-              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
-              r: BUBBLE_RADIUS_SMALL,
-              value: element.overall_sentiment,
-              label: "Sentiment",
-              title: this.chartLabels[dateIndex]
-            };
-          }
-        })
-        .filter(item => typeof item !== "undefined");
+        console.log(index / this.chartLabels.length);
 
-      const specialSentiments = this.chartData.special_sentiment_102
-        .map(element => {
-          const dateIndex = this.chartLabels.findIndex(
-            date => date === element.date
-          );
+        gradient.addColorStop(
+          (index / this.chartLabels.length).toString(),
+          value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
+        );
 
-          if (dateIndex !== -1) {
-            sentimentBackgroundColor.push(
-              parseInt(element.overall_sentiment) < 0
-                ? LOW_SENTIMENT_COLOR
-                : HIGH_SENTIMENT_COLOR
-            );
+        return value;
+      });
 
-            return {
-              x: this.chartLabels[dateIndex],
-              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
-              r: BUBBLE_RADIUS_SMALL,
-              value: element.overall_sentiment,
-              label: "Sentiment",
-              title: this.chartLabels[dateIndex]
-            };
-          }
-        })
-        .filter(item => typeof item !== "undefined");
+      // const generalSentiments = this.chartData.general_sentiment
+      //   .map(element => {
+      //     const dateIndex = this.chartLabels.findIndex(
+      //       date => date === element.date
+      //     );
 
-      const newsSentiments = this.chartData.news_sentiment
-        .map(element => {
-          const dateIndex = this.chartLabels.findIndex(
-            date => date === element.date
-          );
+      //     if (dateIndex !== -1) {
+      //       sentimentBackgroundColor.push(
+      //         parseInt(element.overall_sentiment) < 0
+      //           ? LOW_SENTIMENT_COLOR
+      //           : HIGH_SENTIMENT_COLOR
+      //       );
 
-          if (dateIndex !== -1) {
-            sentimentBackgroundColor.push(
-              parseInt(element.overall_sentiment) < 0
-                ? LOW_SENTIMENT_COLOR
-                : HIGH_SENTIMENT_COLOR
-            );
+      //       return {
+      //         x: this.chartLabels[dateIndex],
+      //         y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+      //         r: BUBBLE_RADIUS_SMALL,
+      //         value: element.overall_sentiment,
+      //         label: "Sentiment",
+      //         title: this.chartLabels[dateIndex]
+      //       };
+      //     }
+      //   })
+      //   .filter(item => typeof item !== "undefined");
 
-            return {
-              x: this.chartLabels[dateIndex],
-              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
-              r: BUBBLE_RADIUS_SMALL,
-              value: element.overall_sentiment,
-              label: "Sentiment",
-              title: this.chartLabels[dateIndex]
-            };
-          }
-        })
-        .filter(item => typeof item !== "undefined");
+      // const specialSentiments = this.chartData.special_sentiment_102
+      //   .map(element => {
+      //     const dateIndex = this.chartLabels.findIndex(
+      //       date => date === element.date
+      //     );
+
+      //     if (dateIndex !== -1) {
+      //       sentimentBackgroundColor.push(
+      //         parseInt(element.overall_sentiment) < 0
+      //           ? LOW_SENTIMENT_COLOR
+      //           : HIGH_SENTIMENT_COLOR
+      //       );
+
+      //       return {
+      //         x: this.chartLabels[dateIndex],
+      //         y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+      //         r: BUBBLE_RADIUS_SMALL,
+      //         value: element.overall_sentiment,
+      //         label: "Sentiment",
+      //         title: this.chartLabels[dateIndex]
+      //       };
+      //     }
+      //   })
+      //   .filter(item => typeof item !== "undefined");
+
+      // const newsSentiments = this.chartData.news_sentiment
+      //   .map(element => {
+      //     const dateIndex = this.chartLabels.findIndex(
+      //       date => date === element.date
+      //     );
+
+      //     if (dateIndex !== -1) {
+      //       sentimentBackgroundColor.push(
+      //         parseInt(element.overall_sentiment) < 0
+      //           ? LOW_SENTIMENT_COLOR
+      //           : HIGH_SENTIMENT_COLOR
+      //       );
+
+      //       return {
+      //         x: this.chartLabels[dateIndex],
+      //         y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+      //         r: BUBBLE_RADIUS_SMALL,
+      //         value: element.overall_sentiment,
+      //         label: "Sentiment",
+      //         title: this.chartLabels[dateIndex]
+      //       };
+      //     }
+      //   })
+      //   .filter(item => typeof item !== "undefined");
 
       this.chartDataSet = [
         {
@@ -229,36 +259,36 @@ export class StockTrendGraphComponent implements OnChanges {
           hoverBackgroundColor: "#ddd763",
           hoverBorderColor: "#eae475"
         },
-        {
-          data: generalSentiments,
-          type: "bubble",
-          pointStyle: "rect",
-          label: "General Sentiments",
-          backgroundColor: sentimentBackgroundColor,
-          borderColor: "#fff",
-          hoverBackgroundColor: sentimentBackgroundColor,
-          hoverBorderColor: "#fff"
-        },
-        {
-          data: specialSentiments,
-          type: "bubble",
-          pointStyle: "triangle",
-          label: "Special Sentiments",
-          backgroundColor: sentimentBackgroundColor,
-          borderColor: "#fff",
-          hoverBackgroundColor: sentimentBackgroundColor,
-          hoverBorderColor: "#fff"
-        },
-        {
-          data: newsSentiments,
-          type: "bubble",
-          pointStyle: "rectRot",
-          label: "News Sentiments",
-          backgroundColor: sentimentBackgroundColor,
-          borderColor: "#fff",
-          hoverBackgroundColor: sentimentBackgroundColor,
-          hoverBorderColor: "#fff"
-        },
+        // {
+        //   data: generalSentiments,
+        //   type: "bubble",
+        //   pointStyle: "rect",
+        //   label: "General Sentiments",
+        //   backgroundColor: sentimentBackgroundColor,
+        //   borderColor: "#fff",
+        //   hoverBackgroundColor: sentimentBackgroundColor,
+        //   hoverBorderColor: "#fff"
+        // },
+        // {
+        //   data: specialSentiments,
+        //   type: "bubble",
+        //   pointStyle: "triangle",
+        //   label: "Special Sentiments",
+        //   backgroundColor: sentimentBackgroundColor,
+        //   borderColor: "#fff",
+        //   hoverBackgroundColor: sentimentBackgroundColor,
+        //   hoverBorderColor: "#fff"
+        // },
+        // {
+        //   data: newsSentiments,
+        //   type: "bubble",
+        //   pointStyle: "rectRot",
+        //   label: "News Sentiments",
+        //   backgroundColor: sentimentBackgroundColor,
+        //   borderColor: "#fff",
+        //   hoverBackgroundColor: sentimentBackgroundColor,
+        //   hoverBorderColor: "#fff"
+        // },
         {
           data: lowData,
           label: "Price",
@@ -278,6 +308,16 @@ export class StockTrendGraphComponent implements OnChanges {
           hoverBackgroundColor: volumeBackgroundColor,
           borderColor: volumeBackgroundColor,
           hoverBorderColor: volumeBackgroundColor
+        },
+        {
+          data: generalSentiments,
+          label: "General Sentiments",
+          type: "line",
+          yAxisID: "y-axis-0",
+          fill: true,
+          backgroundColor: gradient,
+          showLine: true,
+          pointRadius: 1
         }
       ];
 
@@ -301,6 +341,9 @@ export class StockTrendGraphComponent implements OnChanges {
             {
               ticks: {
                 fontColor: DEFAULT_FONT_COLOR
+              },
+              gridLines: {
+                offsetGridLines: true
               }
             }
           ],
@@ -310,7 +353,8 @@ export class StockTrendGraphComponent implements OnChanges {
               id: "y-axis-0",
               ticks: {
                 beginAtZero: true,
-                fontColor: DEFAULT_FONT_COLOR
+                fontColor: DEFAULT_FONT_COLOR,
+                min: -450
               }
             },
             {

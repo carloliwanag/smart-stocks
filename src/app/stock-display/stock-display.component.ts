@@ -21,41 +21,19 @@ export const DEFAULT_STOCK: StockSearch = {
 @Component({
   template: `
     <section
-      class="Main"
+      class="StockDisplay"
       fxLayout
       fxLayout.xs="column"
       fxLayoutAlign="center"
       fxLayoutGap="32px"
       fxLayoutGap.xs="0"
     >
-      <div class="Main-cards" fxFlex="70%">
-        <mat-card>
-          <ng-container *ngIf="!isLoadingStock">
-            <mat-card-header>
-              <mat-card-title
-                >{{ (stock$ | async)?.stock_code }} Historical
-                Details</mat-card-title
-              >
-            </mat-card-header>
-            <mat-card-content>
-              <app-stock-detail [stockData$]="stock$"></app-stock-detail>
-            </mat-card-content>
-          </ng-container>
-          <mat-spinner
-            class="Main-spinner"
-            *ngIf="isLoadingStock"
-            [color]="'accent'"
-            [diameter]="50"
-          ></mat-spinner>
-        </mat-card>
-        <mat-card *ngIf="!isLoadingStock">
-          <mat-card-header>
-            <mat-card-title>Sentiments</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <app-stock-sentiment [stockData$]="stock$"></app-stock-sentiment>
-          </mat-card-content>
-        </mat-card>
+      <div class="StockDisplay-cards" fxFlex="70%">
+        <app-stock-trending
+          class="StockDisplay-components"
+          [busy]="isLoadingStock"
+          [stock$]="stock$"
+        ></app-stock-trending>
         <mat-card *ngIf="!isLoadingStock">
           <mat-card-header>
             <mat-card-title>Technical Details</mat-card-title>
@@ -79,7 +57,7 @@ export const DEFAULT_STOCK: StockSearch = {
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="Main-cards" fxFlex="30%">
+      <div class="StockDisplay-cards" fxFlex="30%">
         <app-stock-helper
           [busy]="isLoadingStock"
           [stockData$]="stock$"
