@@ -135,7 +135,7 @@ export class StockTrendGraphComponent implements OnChanges {
         return current;
       });
 
-      const sentiments = this.chartData.general_sentiment
+      const generalSentiments = this.chartData.general_sentiment
         .map(element => {
           const dateIndex = this.chartLabels.findIndex(
             date => date === element.date
@@ -151,7 +151,57 @@ export class StockTrendGraphComponent implements OnChanges {
             return {
               x: this.chartLabels[dateIndex],
               y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
-              r: BUBBLE_RADIUS_DEFAULT,
+              r: BUBBLE_RADIUS_SMALL,
+              value: element.overall_sentiment,
+              label: "Sentiment",
+              title: this.chartLabels[dateIndex]
+            };
+          }
+        })
+        .filter(item => typeof item !== "undefined");
+      
+        const specialSentiments = this.chartData.special_sentiment_102
+        .map(element => {
+          const dateIndex = this.chartLabels.findIndex(
+            date => date === element.date
+          );
+
+          if (dateIndex !== -1) {
+            sentimentBackgroundColor.push(
+              parseInt(element.overall_sentiment) < 0
+                ? LOW_SENTIMENT_COLOR
+                : HIGH_SENTIMENT_COLOR
+            );
+
+            return {
+              x: this.chartLabels[dateIndex],
+              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+              r: BUBBLE_RADIUS_SMALL,
+              value: element.overall_sentiment,
+              label: "Sentiment",
+              title: this.chartLabels[dateIndex]
+            };
+          }
+        })
+        .filter(item => typeof item !== "undefined");
+      
+      const newsSentiments = this.chartData.news_sentiment
+        .map(element => {
+          const dateIndex = this.chartLabels.findIndex(
+            date => date === element.date
+          );
+
+          if (dateIndex !== -1) {
+            sentimentBackgroundColor.push(
+              parseInt(element.overall_sentiment) < 0
+                ? LOW_SENTIMENT_COLOR
+                : HIGH_SENTIMENT_COLOR
+            );
+
+            return {
+              x: this.chartLabels[dateIndex],
+              y: lowData[dateIndex] - (Math.floor(Math.random() * 10) + 5),
+              r: BUBBLE_RADIUS_SMALL,
               value: element.overall_sentiment,
               label: "Sentiment",
               title: this.chartLabels[dateIndex]
@@ -180,14 +230,35 @@ export class StockTrendGraphComponent implements OnChanges {
           hoverBorderColor: "#eae475"
         },
         {
-          data: sentiments,
+          data: generalSentiments,
           type: "bubble",
-          label: "Sentiments",
+          pointStyle: "rect",
+          label: "General Sentiments",
           backgroundColor: sentimentBackgroundColor,
           borderColor: "#fff",
           hoverBackgroundColor: sentimentBackgroundColor,
           hoverBorderColor: "#fff"
         },
+        {
+          data: specialSentiments,
+          type: "bubble",
+          pointStyle: "triangle",
+          label: "Special Sentiments",
+          backgroundColor: sentimentBackgroundColor,
+          borderColor: "#fff",
+          hoverBackgroundColor: sentimentBackgroundColor,
+          hoverBorderColor: "#fff"
+        },
+        {
+          data: newsSentiments,
+          type: "bubble",
+          pointStyle: "rectRot",
+          label: "News Sentiments",
+          backgroundColor: sentimentBackgroundColor,
+          borderColor: "#fff",
+          hoverBackgroundColor: sentimentBackgroundColor,
+          hoverBorderColor: "#fff"
+        },        
         {
           data: lowData,
           label: "Price",
