@@ -181,7 +181,6 @@ export class StockTrendGraphComponent implements OnChanges {
       const maxSentimentValue = [
         ...specialSentiments,
         ...newsSentiments,
-        ...lowData,
         ...generalSentiments
       ].reduce((prev, current) => {
         if (prev >= current) {
