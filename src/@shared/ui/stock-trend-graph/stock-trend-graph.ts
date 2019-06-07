@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
@@ -55,6 +64,8 @@ export class StockTrendGraphComponent implements OnChanges {
       const sentimentBackgroundColor = [];
       const sentimentRadius = [];
       const generalSentimentColor = [];
+      const newsSentimentColor = [];
+      const specialSentimentColor = [];
       let maxVolume = 0;
 
       this.chartLabels = historicData.map(details => details.fetchdate);
@@ -146,14 +157,31 @@ export class StockTrendGraphComponent implements OnChanges {
           value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
         );
 
-        console.log(index / this.chartLabels.length);
-
         gradient.addColorStop(
           (index / this.chartLabels.length).toString(),
           value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
         );
 
         return value;
+      });
+
+      const newsSentiments = this.chartLabels.map((label, index) => {
+        const dateFoundIndex = this.chartData.news_sentiment.findIndex(
+          item => label === item.date
+        );
+        return dateFoundIndex !== -1
+          ? this.chartData.news_sentiment[dateFoundIndex].overall_sentiment
+          : 0;
+      });
+
+      const specialSentiments = this.chartLabels.map((label, index) => {
+        const dateFoundIndex = this.chartData.special_sentiment_102.findIndex(
+          item => label === item.date
+        );
+        return dateFoundIndex !== -1
+          ? this.chartData.special_sentiment_102[dateFoundIndex]
+              .overall_sentiment
+          : 0;
       });
 
       // const generalSentiments = this.chartData.general_sentiment
@@ -305,8 +333,23 @@ export class StockTrendGraphComponent implements OnChanges {
           label: "General Sentiments",
           type: "line",
           yAxisID: "y-axis-0",
-          //fill: true,
-          backgroundColor: generalSentimentColor,
+          // fill: true,
+          showLine: true,
+          pointRadius: 1
+        },
+        {
+          data: newsSentiments,
+          label: "News Sentiments",
+          type: "line",
+          yAxisID: "y-axis-0",
+          showLine: true,
+          pointRadius: 1
+        },
+        {
+          data: specialSentiments,
+          label: "Special Sentiments",
+          type: "line",
+          yAxisID: "y-axis-0",
           showLine: true,
           pointRadius: 1
         }
@@ -344,8 +387,7 @@ export class StockTrendGraphComponent implements OnChanges {
               id: "y-axis-0",
               ticks: {
                 beginAtZero: true,
-                fontColor: DEFAULT_FONT_COLOR,
-                min: -450
+                fontColor: DEFAULT_FONT_COLOR
               }
             },
             {
