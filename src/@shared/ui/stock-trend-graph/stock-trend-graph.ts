@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild
-} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 
@@ -314,8 +305,8 @@ export class StockTrendGraphComponent implements OnChanges {
           label: "General Sentiments",
           type: "line",
           yAxisID: "y-axis-0",
-          fill: true,
-          backgroundColor: gradient,
+          //fill: true,
+          backgroundColor: generalSentimentColor,
           showLine: true,
           pointRadius: 1
         }
