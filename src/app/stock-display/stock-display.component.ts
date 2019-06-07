@@ -49,9 +49,8 @@ export const DEFAULT_STOCK: StockSearch = {
                   [data]="stock$ | async"
                 ></app-stock-statistics>
               </mat-tab>
-              <mat-tab label="News"> 
-                <app-stock-news [stockData$]="stock$ | async">
-                </app-stock-news>
+              <mat-tab label="News">
+                <app-stock-news [stockData$]="stock$ | async"> </app-stock-news>
               </mat-tab>
             </mat-tab-group>
           </mat-card-content>
@@ -99,7 +98,7 @@ export class StockDisplayComponent implements OnInit {
           Rx.of(stock)
         ).pipe(
           map(([stock, news, foia, sentiments, stockSearch]) => {
-            if (!stock || !news || !foia) {
+            if (!stock || !news || !foia || !sentiments) {
               return undefined;
             }
 
@@ -116,7 +115,6 @@ export class StockDisplayComponent implements OnInit {
       ),
       tap(() => {
         this.isLoadingStock = false;
-        console.log(this.stock$);
       }),
       publishReplay(1),
       refCount()

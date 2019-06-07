@@ -1,6 +1,14 @@
 .StockNews {
-  .mat-list-item {
-    height: auto;
+  // .mat-list-item {
+  //   height: auto;
+  // }
+
+  &-title {
+    margin-bottom: 4px !important;
+  }
+
+  &-date {
+    color: #999;
   }
 
   &-list {
