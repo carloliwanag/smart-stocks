@@ -298,7 +298,7 @@ export class StockTrendGraphComponent implements OnChanges {
               id: "y-axis-3",
               ticks: {
                 fontColor: DEFAULT_FONT_COLOR,
-                min: parseInt(minSentimentValue - sentimentBounds)
+                min: minSentimentValue - sentimentBounds
               }
             },
             {
