@@ -17,6 +17,7 @@ import { MatSort, MatTableDataSource } from "@angular/material";
       [dataSource]="dataSource"
       matSort
       class="Statistics"
+      width="100%"
     >
       <!-- Name Column -->
       <ng-container matColumnDef="name">
@@ -51,6 +52,7 @@ export class StockQuoteComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
     if (changes.data && changes.data.currentValue) {
       this.prepareData();
     }

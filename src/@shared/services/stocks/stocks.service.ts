@@ -41,7 +41,8 @@ export class StocksService {
   }
 
   public getNewsByStockSymbol(
-    symbol: string
+    symbol: string,
+    date: string = undefined
   ): Rx.Observable<StockNewsList | undefined> {
     return this.httpClient
       .get(`${environment.API_URL}/stock-news/${symbol}`)
@@ -84,7 +85,8 @@ export class StocksService {
   }
 
   public getFOIARequestBySymbol(
-    symbol: string
+    symbol: string,
+    date: string = undefined
   ): Rx.Observable<FOIAList | undefined> {
     return this.httpClient.get(`${environment.API_URL}/foia/${symbol}`).pipe(
       map((response: FOIAResult) => {

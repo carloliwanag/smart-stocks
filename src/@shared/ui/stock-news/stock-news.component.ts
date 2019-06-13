@@ -4,8 +4,8 @@ import * as moment from "moment";
 @Component({
   template: `
     <mat-list class="StockNews">
-      <ng-container *ngIf="stockData$ as stock">
-        <mat-list-item *ngFor="let news of stock.news; last as last">
+      <ng-container *ngIf="stockNews">
+        <mat-list-item *ngFor="let news of stockNews; last as last">
           <p class="StockNews-title" matLine>{{ news.title }}</p>
           <p class="StockNews-date" matLine>
             Posted at {{ getDate(news.date) }}
@@ -13,7 +13,7 @@ import * as moment from "moment";
           <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
         </mat-list-item>
       </ng-container>
-      <ng-container *ngIf="!stockData$">
+      <ng-container *ngIf="!stockNews">
         <mat-list-item>No entries found</mat-list-item>
       </ng-container>
     </mat-list>
@@ -22,7 +22,7 @@ import * as moment from "moment";
   styleUrls: ["./stock-news.component.scss"]
 })
 export class StockNewsComponent {
-  @Input() stockData$: any;
+  @Input() stockNews: any;
 
   getDate(date: string) {
     return moment(date).format("dddd MMMM D, YYYY");

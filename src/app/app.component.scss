@@ -1,0 +1,11 @@
+.Main {
+  &-nav {
+    position: fixed;
+    width: 100%;
+    z-index: 20;
+  }
+
+  &-content {
+    margin-top: 64px;
+  }
+}

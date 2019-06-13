@@ -3,8 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewChild
 } from "@angular/core";
@@ -14,8 +16,6 @@ import { BaseChartDirective, Label } from "ng2-charts";
 const DEFAULT_FONT_COLOR = "#ccc";
 const LOW_VOLUME_COLOR = "#d9534f";
 const HIGH_VOLUME_COLOR = "#5cb85c";
-const LOW_SENTIMENT_COLOR = "rgba(226, 112, 108, 1)"; //"#e2706c";
-const HIGH_SENTIMENT_COLOR = "rgba(84, 206, 123, 1)"; //"#54ce7b";
 const BUBBLE_RADIUS_SMALL = 4;
 const BUBBLE_RADIUS_HIGH = 8;
 const BUBBLE_RADIUS_DEFAULT = 6;
@@ -45,6 +45,8 @@ export class StockTrendGraphComponent implements OnChanges {
   chartLabels: Label[];
   chartOptions: ChartOptions;
 
+  @Output() clickData = new EventEmitter<string>();
+
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
   @ViewChild("chart") canvas: ElementRef;
 
@@ -52,20 +54,13 @@ export class StockTrendGraphComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData && changes.chartData.currentValue) {
-      const gradient = this.canvas.nativeElement
-        .getContext("2d")
-        .createLinearGradient(0, 0, 300, 500);
       const historicData = this.chartData.historical_details.reverse();
       const volumeData = historicData.map(details => details.Volume);
       const lowData = historicData.map(details =>
         parseFloat(details.Low).toFixed(2)
       );
       const volumeBackgroundColor = [];
-      const sentimentBackgroundColor = [];
       const sentimentRadius = [];
-      const generalSentimentColor = [];
-      const newsSentimentColor = [];
-      const specialSentimentColor = [];
       let maxVolume = 0;
 
       this.chartLabels = historicData.map(details => details.fetchdate);
@@ -125,74 +120,6 @@ export class StockTrendGraphComponent implements OnChanges {
         return current;
       });
 
-      const generalSentiments = this.chartLabels.map((label, index) => {
-        const dateFoundIndex = this.chartData.general_sentiment.findIndex(
-          item => label === item.date
-        );
-        const value =
-          dateFoundIndex !== -1
-            ? this.chartData.general_sentiment[dateFoundIndex].overall_sentiment
-            : 0;
-
-        generalSentimentColor.push(
-          value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
-        );
-
-        gradient.addColorStop(
-          (index / this.chartLabels.length).toString(),
-          value < 0 ? LOW_SENTIMENT_COLOR : HIGH_SENTIMENT_COLOR
-        );
-
-        return value;
-      });
-
-      const newsSentiments = this.chartLabels.map((label, index) => {
-        const dateFoundIndex = this.chartData.news_sentiment.findIndex(
-          item => label === item.date
-        );
-        return dateFoundIndex !== -1
-          ? this.chartData.news_sentiment[dateFoundIndex].overall_sentiment
-          : 0;
-      });
-
-      const specialSentiments = this.chartLabels.map((label, index) => {
-        const dateFoundIndex = this.chartData.special_sentiment_102.findIndex(
-          item => label === item.date
-        );
-        return dateFoundIndex !== -1
-          ? this.chartData.special_sentiment_102[dateFoundIndex]
-              .overall_sentiment
-          : 0;
-      });
-
-      const minSentimentValue = [
-        ...specialSentiments,
-        ...newsSentiments,
-        ...lowData,
-        ...generalSentiments
-      ].reduce((prev, current) => {
-        if (prev <= current) {
-          return prev;
-        }
-
-        return current;
-      });
-
-      const maxSentimentValue = [
-        ...specialSentiments,
-        ...newsSentiments,
-        ...generalSentiments
-      ].reduce((prev, current) => {
-        if (prev >= current) {
-          return prev;
-        }
-
-        return current;
-      });
-
-      const sentimentBounds =
-        Math.abs(maxSentimentValue) + Math.abs(minSentimentValue) / 2;
-
       this.chartDataSet = [
         {
           data: foia,
@@ -222,39 +149,6 @@ export class StockTrendGraphComponent implements OnChanges {
           hoverBackgroundColor: volumeBackgroundColor,
           borderColor: volumeBackgroundColor,
           hoverBorderColor: volumeBackgroundColor
-        },
-        {
-          data: generalSentiments,
-          label: "General Sentiments",
-          type: "line",
-          yAxisID: "y-axis-3",
-          // fill: true,
-          showLine: true,
-          pointRadius: 1,
-          backgroundColor: "#c09ae2",
-          borderColor: "#713ea0",
-          hoverBackgroundColor: "#c09ae2",
-          hoverBorderColor: "#713ea0"
-        },
-        {
-          data: newsSentiments,
-          label: "News Sentiments",
-          type: "line",
-          yAxisID: "y-axis-3",
-          showLine: true,
-          pointRadius: 1
-        },
-        {
-          data: specialSentiments,
-          label: "Special Sentiments",
-          type: "line",
-          yAxisID: "y-axis-3",
-          showLine: true,
-          pointRadius: 1,
-          backgroundColor: "#ddd763",
-          borderColor: "#eae475",
-          hoverBackgroundColor: "#ddd763",
-          hoverBorderColor: "#eae475"
         }
       ];
 
@@ -294,14 +188,6 @@ export class StockTrendGraphComponent implements OnChanges {
               }
             },
             {
-              position: "left",
-              id: "y-axis-3",
-              ticks: {
-                fontColor: DEFAULT_FONT_COLOR,
-                min: minSentimentValue - sentimentBounds
-              }
-            },
-            {
               position: "right",
               id: "y-axis-1",
               ticks: {
@@ -318,14 +204,8 @@ export class StockTrendGraphComponent implements OnChanges {
               const toolTip = tooltipItem[0];
               const datasetIndex = toolTip.datasetIndex;
               const index = toolTip.index;
-              const activeItem = data.datasets[datasetIndex];
 
-              switch (activeItem.type) {
-                case "bubble":
-                  return (activeItem.data[index] as any).title;
-                default:
-                  return toolTip.xLabel;
-              }
+              return this.getDataPointDate(datasetIndex, index);
             },
             label: function(tooltipItem, data) {
               const datasetIndex = tooltipItem.datasetIndex;
@@ -342,9 +222,30 @@ export class StockTrendGraphComponent implements OnChanges {
               }
             }
           }
+        },
+        onClick: () => {
+          const selectedData = this.chart.chart.getElementAtEvent(event);
+
+          if (selectedData.length > 0) {
+            const item = selectedData[0] as any;
+            this.clickData.emit(
+              this.getDataPointDate(item._datasetIndex, item._index)
+            );
+          }
         }
       };
       this.cd.detectChanges();
+    }
+  }
+
+  private getDataPointDate(datasetIndex, index): any {
+    const activeItem = this.chart.datasets[datasetIndex];
+
+    switch (activeItem.type) {
+      case "bubble":
+        return (activeItem.data[index] as any).title;
+      default:
+        return this.chart.labels[index];
     }
   }
 }

@@ -11,7 +11,6 @@ import {
   MatTableModule,
   MatTooltipModule
 } from "@angular/material";
-import { StockDetailComponent } from "@shared/ui/stock-detail";
 import { ChartsModule } from "ng2-charts";
 import {
   PerfectScrollbarConfigInterface,
@@ -36,7 +35,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     NavSearchComponent,
-    StockDetailComponent,
     StockFinanceDetailsComponent,
     StockFoiaComponent,
     StockNewsComponent,
@@ -64,7 +62,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   exports: [
     NavSearchComponent,
-    StockDetailComponent,
     StockFinanceDetailsComponent,
     StockTrendGraphComponent,
     StockQuoteComponent,

@@ -8,10 +8,12 @@ export const DEFAULT_STOCK: StockSearch = {
 
 @Component({
   template: `
-    <mat-sidenav-container>
+    <mat-sidenav-container class="Main">
       <mat-sidenav-content>
-        <app-main-nav></app-main-nav>
-        <router-outlet></router-outlet>
+        <app-main-nav class="Main-nav"></app-main-nav>
+        <section class="Main-content">
+          <router-outlet></router-outlet>
+        </section>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,

@@ -47,3 +47,8 @@ export interface StockSentiment {
   date: string;
   overall_sentiment: number;
 }
+
+export interface StockDetailSearch {
+  symbol: string;
+  date: string;
+}
