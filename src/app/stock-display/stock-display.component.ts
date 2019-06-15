@@ -125,7 +125,7 @@ export class StockDisplayComponent implements OnInit {
     this.navSearchSubscription = this.navSearchService
       .getObservable()
       .subscribe(keyword => {
-        this.sideDrawer.close();
+        this.onToggleSideDrawer(false);
         this.stockSubject.next(keyword);
       });
 
