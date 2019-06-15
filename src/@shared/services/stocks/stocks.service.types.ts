@@ -52,3 +52,11 @@ export interface StockDetailSearch {
   symbol: string;
   date: string;
 }
+
+export interface StockWordCloudResult {
+  data: StockWordCloud;
+}
+
+export interface StockWordCloud {
+  [key: string]: string;
+}

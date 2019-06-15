@@ -54,11 +54,9 @@ export class StockTrendGraphComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData && changes.chartData.currentValue) {
-      const historicData = this.chartData.historical_details.reverse();
+      const historicData = [...this.chartData.historical_details].reverse();
       const volumeData = historicData.map(details => details.Volume);
-      const lowData = historicData.map(details =>
-        parseFloat(details.Low).toFixed(2)
-      );
+      const lowData = historicData.map(details => parseFloat(details.Low));
       const volumeBackgroundColor = [];
       const sentimentRadius = [];
       let maxVolume = 0;
@@ -66,8 +64,8 @@ export class StockTrendGraphComponent implements OnChanges {
       this.chartLabels = historicData.map(details => details.fetchdate);
 
       lowData.reduce((prev, cur) => {
-        const previous = parseInt(prev, 10);
-        const current = parseInt(cur, 10);
+        const previous = prev;
+        const current = cur;
 
         sentimentRadius.push(
           previous <= current ? BUBBLE_RADIUS_HIGH : BUBBLE_RADIUS_SMALL
@@ -234,8 +232,9 @@ export class StockTrendGraphComponent implements OnChanges {
           }
         }
       };
-      this.cd.detectChanges();
     }
+
+    this.cd.detectChanges();
   }
 
   private getDataPointDate(datasetIndex, index): any {

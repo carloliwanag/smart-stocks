@@ -11,6 +11,7 @@ import {
   MatTableModule,
   MatTooltipModule
 } from "@angular/material";
+import { TagCloudModule } from "angular-tag-cloud-module";
 import { ChartsModule } from "ng2-charts";
 import {
   PerfectScrollbarConfigInterface,
@@ -27,6 +28,7 @@ import { StockStatisticsComponent } from "./stock-statistics";
 import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
+import { StockWordCloudComponent } from "./stock-word-cloud";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -43,7 +45,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockStatisticsComponent,
     StockSummaryGraphComponent,
     StockTrendGraphComponent,
-    StockVolumeGraphComponent
+    StockVolumeGraphComponent,
+    StockWordCloudComponent
   ],
   imports: [
     ChartsModule,
@@ -58,16 +61,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatTableModule,
     MatTooltipModule,
     PerfectScrollbarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TagCloudModule
   ],
   exports: [
     NavSearchComponent,
     StockFinanceDetailsComponent,
-    StockTrendGraphComponent,
+    StockNewsComponent,
     StockQuoteComponent,
-    StockStatisticsComponent,
     StockSentimentComponent,
-    StockNewsComponent
+    StockStatisticsComponent,
+    StockTrendGraphComponent,
+    StockWordCloudComponent
   ],
   providers: [
     {

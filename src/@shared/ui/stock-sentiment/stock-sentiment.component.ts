@@ -49,7 +49,7 @@ export class StockSentimentComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData && changes.chartData.currentValue) {
-      const historicData = this.chartData.historical_details.reverse();
+      const historicData = [...this.chartData.historical_details].reverse();
       this.chartLabels = historicData.map(details => details.fetchdate);
 
       const generalSentiments = this.chartLabels.map((label, index) => {

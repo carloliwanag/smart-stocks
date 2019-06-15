@@ -5,9 +5,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output
 } from "@angular/core";
+import { MatTabChangeEvent } from "@angular/material";
 import {
   StockDetailSearch,
   StockNewsList,
@@ -19,6 +21,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  map,
   publishReplay,
   refCount,
   switchMap,
@@ -33,7 +36,22 @@ import {
       </div>
       <mat-icon class="StockInfo-close" (click)="onClose()">close</mat-icon>
     </section>
-    <mat-tab-group [dynamicHeight]="true">
+    <mat-tab-group
+      [dynamicHeight]="true"
+      (selectedTabChange)="tabChanged($event)"
+    >
+      <mat-tab label="Social">
+        <app-stock-social
+          *ngIf="!isLoadingSocial && selectedTab === 0 && socialData"
+          [data]="socialData"
+        ></app-stock-social>
+        <mat-spinner
+          class="StockInfo-spinner"
+          *ngIf="isLoadingSocial"
+          [color]="'accent'"
+          [diameter]="50"
+        ></mat-spinner>
+      </mat-tab>
       <mat-tab label="Financial">
         <app-stock-finance-details
           [hidden]="isLoadingStock"
@@ -74,15 +92,21 @@ import {
   styleUrls: ["./stock-info.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StockInfoComponent implements OnInit {
+export class StockInfoComponent implements OnInit, OnDestroy {
   @Input() stockDetailSearch$: Rx.Observable<StockDetailSearch>;
   @Output() close = new EventEmitter<boolean>();
 
   news$: Rx.Observable<StockNewsList>;
   stock$: Rx.Observable<any>;
+  social$: Rx.Observable<any>;
 
   isLoadingNews = true;
+  isLoadingSocial = true;
   isLoadingStock = true;
+  selectedTab = 0;
+  socialData: any;
+
+  private socialDataSubscription: Rx.Subscription;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -132,6 +156,46 @@ export class StockInfoComponent implements OnInit {
       publishReplay(1),
       refCount()
     );
+
+    this.social$ = stockDetailSearch$.pipe(
+      tap(() => {
+        this.isLoadingSocial = true;
+        this.cd.detectChanges();
+      }),
+      switchMap(stockDetailSearch =>
+        Rx.zip(
+          this.stocksService.getWordCloudData(
+            stockDetailSearch.symbol,
+            stockDetailSearch.date
+          )
+        ).pipe(map(([wordCloud]) => ({ wordCloud })))
+      ),
+      tap(() => {
+        this.isLoadingSocial = false;
+        this.cd.detectChanges();
+      }),
+      publishReplay(1),
+      refCount()
+    );
+
+    /**
+     * Hack for angular cloud word component wherein it stupidly tries to redraw
+     * the words by checking if a word can fit a particular DOM element even if
+     * its parent container has a height or width of zero which results into an
+     * infinite loop.
+     *
+     * Solution was to subscribe and check if the tab content is
+     * rendered so we can display the word cloud properly.
+     */
+    this.socialDataSubscription = this.social$.subscribe(result => {
+      this.socialData = result;
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.socialDataSubscription) {
+      this.socialDataSubscription.unsubscribe();
+    }
   }
 
   getDate(date: string) {
@@ -140,5 +204,9 @@ export class StockInfoComponent implements OnInit {
 
   onClose() {
     this.close.emit(true);
+  }
+
+  tabChanged($event: MatTabChangeEvent) {
+    this.selectedTab = $event.index;
   }
 }

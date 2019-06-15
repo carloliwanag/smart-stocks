@@ -11,7 +11,9 @@ import {
   StockNewsList,
   StockSearchList,
   StockSentimentResult,
-  StockSentiments
+  StockSentiments,
+  StockWordCloud,
+  StockWordCloudResult
 } from "./stocks.service.types";
 
 @Injectable({
@@ -111,6 +113,19 @@ export class StocksService {
           }
 
           return undefined;
+        })
+      );
+  }
+
+  public getWordCloudData(
+    symbol: string,
+    date: string
+  ): Rx.Observable<StockWordCloud | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-wc/${symbol}?date=${date}`)
+      .pipe(
+        map((response: StockWordCloudResult) => {
+          return response.data || undefined;
         })
       );
   }

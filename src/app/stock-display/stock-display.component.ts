@@ -30,6 +30,21 @@ export const DEFAULT_STOCK: StockSearch = {
   company_name: "Tesla, Inc."
 };
 
+const DEFAULT_COLUMN_WIDTH = {
+  left: "60%",
+  right: "40%"
+};
+
+const PREVIEW_COLUMN_WIDTH = {
+  left: "40%",
+  right: "60%"
+};
+
+export interface ColumWidth {
+  left: string;
+  right: string;
+}
+
 @Component({
   template: `
     <mat-drawer-container class="example-container" [hasBackdrop]="false">
@@ -41,7 +56,7 @@ export const DEFAULT_STOCK: StockSearch = {
         fxLayoutGap="32px"
         fxLayoutGap.xs="0"
       >
-        <div class="StockDisplay-cards" fxFlex="60%">
+        <div class="StockDisplay-cards" [fxFlex]="columnWidth.left">
           <app-stock-trending
             class="StockDisplay-components"
             [busy]="isLoadingStock"
@@ -56,7 +71,7 @@ export const DEFAULT_STOCK: StockSearch = {
             (clickData)="onClickStockTrending($event)"
           ></app-stock-sentiment>
         </div>
-        <div class="StockDisplay-cards" fxFlex="40%">
+        <div class="StockDisplay-cards" [fxFlex]="columnWidth.right">
           <app-stock-helper
             [busy]="isLoadingStock"
             [stock]="stock$ | async"
@@ -64,15 +79,14 @@ export const DEFAULT_STOCK: StockSearch = {
         </div>
       </mat-drawer-content>
       <mat-drawer
-        class="StockDisplay-info"
-        style="width: 40%"
         #drawer
+        class="StockDisplay-info"
         [mode]="'over'"
         [position]="'end'"
       >
         <app-stock-info
           [stockDetailSearch$]="stockDetailSearch$"
-          (close)="onCloseSideDrawer()"
+          (close)="onToggleSideDrawer(false)"
         ></app-stock-info>
       </mat-drawer>
     </mat-drawer-container>
@@ -89,12 +103,16 @@ export class StockDisplayComponent implements OnInit {
     undefined
   );
   stock$: Rx.Observable<any>;
-  stockDetailSearch$ = this.stockDetailSearchSubject.asObservable();
+  stockDetailSearch$ = this.stockDetailSearchSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
 
   currentStockSymbol: string;
   isLoadingStock = true;
   isLoadingStockInfo = true;
   navSearchSubscription: Rx.Subscription;
+
+  columnWidth: ColumWidth = DEFAULT_COLUMN_WIDTH;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -154,15 +172,21 @@ export class StockDisplayComponent implements OnInit {
   }
 
   onClickStockTrending(date: string) {
-    // console.log(data);
-    this.sideDrawer.open();
+    this.onToggleSideDrawer(true);
     this.stockDetailSearchSubject.next({
       symbol: this.currentStockSymbol,
       date
     });
   }
 
-  onCloseSideDrawer() {
-    this.sideDrawer.close();
+  onToggleSideDrawer(visible: boolean) {
+    if (visible) {
+      this.sideDrawer.open();
+      this.columnWidth = PREVIEW_COLUMN_WIDTH;
+    } else {
+      this.columnWidth = DEFAULT_COLUMN_WIDTH;
+      this.sideDrawer.close();
+    }
+    this.cd.detectChanges();
   }
 }

@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from "@angular/core";
 
 @Component({
   template: `
@@ -30,7 +36,8 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     </mat-card>
   `,
   selector: "app-stock-sentiment",
-  styleUrls: ["./stock-sentiment.component.scss"]
+  styleUrls: ["./stock-sentiment.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StockSentimentComponent {
   @Input() busy: boolean;

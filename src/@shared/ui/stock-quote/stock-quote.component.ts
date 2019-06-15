@@ -52,7 +52,6 @@ export class StockQuoteComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (changes.data && changes.data.currentValue) {
       this.prepareData();
     }
