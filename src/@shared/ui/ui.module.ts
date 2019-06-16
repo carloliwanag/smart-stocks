@@ -69,7 +69,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReactiveFormsModule,
     TagCloudModule,
     AgmCoreModule.forRoot({
-      apiKey:'AIzaSyDa7vK7i47LxiJFkhVUwWNlNRnktODa4Lo'
+      apiKey:'<api_key>'
     })
   ],
   exports: [
