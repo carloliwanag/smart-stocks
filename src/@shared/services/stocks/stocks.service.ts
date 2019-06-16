@@ -4,6 +4,7 @@ import * as Rx from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import {
+  EventsMap,
   FOIAList,
   FOIAResult,
   StockList,
@@ -126,6 +127,16 @@ export class StocksService {
       .pipe(
         map((response: StockWordCloudResult) => {
           return response.data || undefined;
+        })
+      );
+  }
+
+  public getEventsMap(symbol: string): Rx.Observable<EventsMap[] | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-map/${symbol}`)
+      .pipe(
+        map((response: any) => {
+          return response.data.result || undefined;
         })
       );
   }
