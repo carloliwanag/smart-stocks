@@ -1,3 +1,4 @@
+import { AgmCoreModule } from "@agm/core";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -18,8 +19,8 @@ import {
   PerfectScrollbarModule,
   PERFECT_SCROLLBAR_CONFIG
 } from "ngx-perfect-scrollbar";
-import { AgmCoreModule } from '@agm/core';
-
+import { environment } from "../../environments/environment";
+import { EventsMapComponent } from "./events-map";
 // custom components
 import { NavSearchComponent } from "./nav-search";
 import { StockFinanceDetailsComponent } from "./stock-finance-details";
@@ -32,7 +33,6 @@ import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
 import { StockWordCloudComponent } from "./stock-word-cloud";
-import { EventsMapComponent } from './events-map';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -69,12 +69,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReactiveFormsModule,
     TagCloudModule,
     AgmCoreModule.forRoot({
-      apiKey:'<api_key>'
+      apiKey: environment.GOOGLE_MAPS_API_KEY
     })
   ],
   exports: [
     NavSearchComponent,
     StockFinanceDetailsComponent,
+    StockFoiaComponent,
     StockNewsComponent,
     StockQuoteComponent,
     StockSentimentComponent,

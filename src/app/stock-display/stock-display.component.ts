@@ -26,8 +26,8 @@ import {
 } from "rxjs/operators";
 
 export const DEFAULT_STOCK: StockSearch = {
-  ticker: "TSLA",
-  company_name: "Tesla, Inc."
+  ticker: "PTE", // "TSLA",
+  company_name: "PolarityTE, Inc." // "Tesla, Inc."
 };
 
 const DEFAULT_COLUMN_WIDTH = {
@@ -70,11 +70,13 @@ export interface ColumWidth {
             [stock]="stock$ | async"
             (clickData)="onClickStockTrending($event)"
           ></app-stock-sentiment>
-          <app-events-map
+          <app-stock-event-card
+            *ngIf="!isLoadingStock"
             class="StockDisplay-components"
-            [stock$]="stock$ | async"
-            >
-          </app-events-map>
+            [busy]="isLoadingStock"
+            [events]="(stock$ | async)?.events"
+          >
+          </app-stock-event-card>
         </div>
         <div class="StockDisplay-cards" [fxFlex]="columnWidth.right">
           <app-stock-helper
@@ -158,7 +160,7 @@ export class StockDisplayComponent implements OnInit {
               ...sentiments,
               events: eventsMap,
               stock_code: stockSearch.ticker,
-              company_name: stockSearch.company_name,
+              company_name: stockSearch.company_name
             };
           })
         )

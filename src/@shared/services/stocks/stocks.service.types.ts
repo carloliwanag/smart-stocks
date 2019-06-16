@@ -61,41 +61,52 @@ export interface StockWordCloud {
   [key: string]: string;
 }
 
+export interface EventsMapResult {
+  data: EventsMapResultObject;
+}
+
+export interface EventsMapResultObject {
+  result: EventsMapList;
+}
+
+export type EventsMapList = ReadonlyArray<EventsMap>;
 
 export interface EventsMap {
-  category: string,
-  city: string,
-  from: string,
-  isp: string,
-  lat: number,
-  organizationName: string,
-  metroCode: string,
-  website: string,
-  bio: string,
-  timezone: string,
-  phone: string,
-  flag: string,
-  facebook: string,
-  companyName: string,
-  ip: string,
-  date: string,
-  compName: string,
-  organizationUrl: string,
-  googlePlus: string,
-  country: string,
-  symbol: string,
-  address: string,
-  youtube: string,
-  logoUrl: string,
-  lon: number,
-  time: string,
-  organization: string,
-  resolution:string,
-  browser: string,
-  domain: string,
-  twitter: string,
-  accuracyRadius: number,
-  postalCode: string,
-  os: string,
-  continent: string
+  category: string;
+  city: string;
+  from: string;
+  isp: string;
+  lat: string;
+  organizationName: string;
+  metroCode: string;
+  website: string;
+  bio: string;
+  timezone: string;
+  phone: string;
+  flag: string;
+  facebook: string;
+  companyName: string;
+  ip: string;
+  date: string;
+  compName: string;
+  organizationUrl: string;
+  googlePlus: string;
+  country: string;
+  symbol: string;
+  address: string;
+  youtube: string;
+  logoUrl: string;
+  lon: string;
+  time: string;
+  organization: string;
+  resolution: string;
+  browser: string;
+  domain: string;
+  twitter: string;
+  accuracyRadius: number;
+  postalCode: string;
+  os: string;
+  continent: string;
+  Latitude: string;
+  Longitude: string;
 }

@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { StockDisplayComponent } from "./stock-display.component";
+import { StockEventCardComponent } from "./stock-event-card/stock-event-card.component";
 import { StockHelperComponent } from "./stock-helper/stock-helper.component";
 import { StockInfoComponent } from "./stock-info/stock-info.component";
 import { StockSentimentComponent } from "./stock-sentiment/stock-sentiment.component";
@@ -9,6 +10,7 @@ import { StockTrendingComponent } from "./stock-trending/stock-trending.componen
 
 export const RouteComponents = [
   StockDisplayComponent,
+  StockEventCardComponent,
   StockHelperComponent,
   StockInfoComponent,
   StockSentimentComponent,

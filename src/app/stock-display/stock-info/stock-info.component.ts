@@ -11,6 +11,7 @@ import {
 } from "@angular/core";
 import { MatTabChangeEvent } from "@angular/material";
 import {
+  FOIAList,
   StockDetailSearch,
   StockNewsList,
   StocksService
@@ -86,6 +87,18 @@ import {
           [diameter]="50"
         ></mat-spinner>
       </mat-tab>
+      <mat-tab label="FOIA">
+        <app-stock-foia
+          [hidden]="isLoadingFoia"
+          [foia]="foia$ | async"
+        ></app-stock-foia>
+        <mat-spinner
+          class="StockInfo-spinner"
+          *ngIf="isLoadingFoia"
+          [color]="'accent'"
+          [diameter]="50"
+        ></mat-spinner>
+      </mat-tab>
     </mat-tab-group>
   `,
   selector: "app-stock-info",
@@ -99,7 +112,9 @@ export class StockInfoComponent implements OnInit, OnDestroy {
   news$: Rx.Observable<StockNewsList>;
   stock$: Rx.Observable<any>;
   social$: Rx.Observable<any>;
+  foia$: Rx.Observable<FOIAList>;
 
+  isLoadingFoia = true;
   isLoadingNews = true;
   isLoadingSocial = true;
   isLoadingStock = true;
@@ -151,6 +166,22 @@ export class StockInfoComponent implements OnInit, OnDestroy {
       ),
       tap(() => {
         this.isLoadingNews = false;
+        this.cd.detectChanges();
+      }),
+      publishReplay(1),
+      refCount()
+    );
+
+    this.foia$ = stockDetailSearch$.pipe(
+      tap(() => {
+        this.isLoadingFoia = true;
+        this.cd.detectChanges();
+      }),
+      switchMap(stockDetailSearch =>
+        this.stocksService.getFOIARequestBySymbol(stockDetailSearch.symbol)
+      ),
+      tap(() => {
+        this.isLoadingFoia = false;
         this.cd.detectChanges();
       }),
       publishReplay(1),

@@ -1,14 +1,12 @@
 import { Component, Input } from "@angular/core";
-import * as Rx from "rxjs";
+import { FOIAList } from "@shared/services";
 
 @Component({
-  selector: "app-stock-foia",
-  styleUrls: ["./stock-foia.component.scss"],
   template: `
     <table
-      *ngIf="stockData$ | async as tableData; else noData"
+      *ngIf="foia && foia.length > 0; else noData"
       mat-table
-      [dataSource]="tableData.foia"
+      [dataSource]="foia"
       matSort
       class="Foia"
     >
@@ -21,6 +19,14 @@ import * as Rx from "rxjs";
       <!-- Value Column -->
       <ng-container matColumnDef="companyname">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.requestdescription }}
+        </td>
+      </ng-container>
+
+      <!-- Value Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
         <td mat-cell *matCellDef="let element">{{ element.companyname }}</td>
       </ng-container>
 
@@ -33,9 +39,11 @@ import * as Rx from "rxjs";
         <mat-list-item>No results found</mat-list-item>
       </mat-list>
     </ng-template>
-  `
+  `,
+  selector: "app-stock-foia",
+  styleUrls: ["./stock-foia.component.scss"]
 })
 export class StockFoiaComponent {
-  @Input() stockData$: Rx.Observable<any | undefined>;
-  displayedColumns: string[] = ["name", "companyname"];
+  @Input() foia: FOIAList | undefined;
+  displayedColumns: string[] = ["name", "companyname", "description"];
 }
