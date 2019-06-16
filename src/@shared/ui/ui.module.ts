@@ -18,6 +18,9 @@ import {
   PerfectScrollbarModule,
   PERFECT_SCROLLBAR_CONFIG
 } from "ngx-perfect-scrollbar";
+import { AgmCoreModule } from '@agm/core';
+
+// custom components
 import { NavSearchComponent } from "./nav-search";
 import { StockFinanceDetailsComponent } from "./stock-finance-details";
 import { StockFoiaComponent } from "./stock-foia";
@@ -29,6 +32,7 @@ import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
 import { StockWordCloudComponent } from "./stock-word-cloud";
+import { EventsMapComponent } from './events-map';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -46,7 +50,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockSummaryGraphComponent,
     StockTrendGraphComponent,
     StockVolumeGraphComponent,
-    StockWordCloudComponent
+    StockWordCloudComponent,
+    EventsMapComponent
   ],
   imports: [
     ChartsModule,
@@ -62,7 +67,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatTooltipModule,
     PerfectScrollbarModule,
     ReactiveFormsModule,
-    TagCloudModule
+    TagCloudModule,
+    AgmCoreModule.forRoot({
+      apiKey:'AIzaSyDa7vK7i47LxiJFkhVUwWNlNRnktODa4Lo'
+    })
   ],
   exports: [
     NavSearchComponent,
@@ -72,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockSentimentComponent,
     StockStatisticsComponent,
     StockTrendGraphComponent,
-    StockWordCloudComponent
+    StockWordCloudComponent,
+    EventsMapComponent
   ],
   providers: [
     {

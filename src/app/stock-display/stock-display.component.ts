@@ -70,6 +70,11 @@ export interface ColumWidth {
             [stock]="stock$ | async"
             (clickData)="onClickStockTrending($event)"
           ></app-stock-sentiment>
+          <app-events-map
+            class="StockDisplay-components"
+            [stock$]="stock$ | async"
+            >
+          </app-events-map>
         </div>
         <div class="StockDisplay-cards" [fxFlex]="columnWidth.right">
           <app-stock-helper
@@ -143,15 +148,17 @@ export class StockDisplayComponent implements OnInit {
           this.stocksService.getByStockSymbol(stock.ticker),
           this.stocksService.getFOIARequestBySymbol(stock.company_name),
           this.stocksService.getSentimentBySymbol(stock.ticker),
+          this.stocksService.getEventsMap(stock.ticker),
           Rx.of(stock)
         ).pipe(
-          map(([stock, foia, sentiments, stockSearch]) => {
+          map(([stock, foia, sentiments, eventsMap, stockSearch]) => {
             return {
               foia,
               ...stock,
               ...sentiments,
+              events: eventsMap,
               stock_code: stockSearch.ticker,
-              company_name: stockSearch.company_name
+              company_name: stockSearch.company_name,
             };
           })
         )

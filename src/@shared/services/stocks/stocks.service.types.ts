@@ -60,3 +60,42 @@ export interface StockWordCloudResult {
 export interface StockWordCloud {
   [key: string]: string;
 }
+
+
+export interface EventsMap {
+  category: string,
+  city: string,
+  from: string,
+  isp: string,
+  lat: number,
+  organizationName: string,
+  metroCode: string,
+  website: string,
+  bio: string,
+  timezone: string,
+  phone: string,
+  flag: string,
+  facebook: string,
+  companyName: string,
+  ip: string,
+  date: string,
+  compName: string,
+  organizationUrl: string,
+  googlePlus: string,
+  country: string,
+  symbol: string,
+  address: string,
+  youtube: string,
+  logoUrl: string,
+  lon: number,
+  time: string,
+  organization: string,
+  resolution:string,
+  browser: string,
+  domain: string,
+  twitter: string,
+  accuracyRadius: number,
+  postalCode: string,
+  os: string,
+  continent: string
+}
