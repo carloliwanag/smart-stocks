@@ -1,6 +1,7 @@
 import { AgmCoreModule } from "@agm/core";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatAutocompleteModule,
@@ -23,6 +24,10 @@ import { environment } from "../../environments/environment";
 import { EventsMapComponent } from "./events-map";
 // custom components
 import { NavSearchComponent } from "./nav-search";
+import {
+  StockChatterVolumeColumnComponent,
+  StockChatterVolumeGraphComponent
+} from "./stock-chatter-volume";
 import { StockFinanceDetailsComponent } from "./stock-finance-details";
 import { StockFoiaComponent } from "./stock-foia";
 import { StockNewsComponent } from "./stock-news";
@@ -41,6 +46,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     NavSearchComponent,
+    StockChatterVolumeColumnComponent,
+    StockChatterVolumeGraphComponent,
     StockFinanceDetailsComponent,
     StockFoiaComponent,
     StockNewsComponent,
@@ -56,6 +63,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   imports: [
     ChartsModule,
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -74,6 +82,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   exports: [
     NavSearchComponent,
+    StockChatterVolumeGraphComponent,
     StockFinanceDetailsComponent,
     StockFoiaComponent,
     StockNewsComponent,

@@ -1,0 +1,19 @@
+.StockChatterVolumeColumn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+
+  &-day {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 12px 0 16px;
+  }
+
+  &-percentage {
+    font-size: 64px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #5cb85c;
+  }
+}
