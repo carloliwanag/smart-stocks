@@ -16,8 +16,9 @@ import { CloudData } from "angular-tag-cloud-module";
         [data]="cloudData"
         [height]="height"
         [width]="width"
-        [strict]="true"
+        [strict]="false"
         [realignOnResize]="false"
+        [overflow]="false"
       ></angular-tag-cloud>
     </section>
   `,
@@ -27,7 +28,7 @@ import { CloudData } from "angular-tag-cloud-module";
 })
 export class StockWordCloudComponent implements OnChanges {
   @Input() width: number = 1;
-  @Input() height: number = 180;
+  @Input() height: number = 190;
   @Input() data: StockWordCloud;
 
   cloudData: CloudData[] = [];

@@ -12,4 +12,9 @@
   &-cardTitle {
     text-align: center;
   }
+
+  &-cardWrap {
+    max-height: 220px;
+    min-height: 220px;
+  }
 }

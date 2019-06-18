@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit
+  OnChanges,
+  SimpleChanges
 } from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Label } from "ng2-charts";
@@ -11,7 +12,13 @@ import { Label } from "ng2-charts";
   template: `
     <section class="StockChatterVolumeColumn">
       <span class="StockChatterVolumeColumn-day">{{ day }}</span>
-      <span class="StockChatterVolumeColumn-percentage">{{ percentage }}%</span>
+      <span
+        *ngIf="percentage"
+        class="StockChatterVolumeColumn-percentage"
+        [ngClass]="{ 'StockChatterVolumeColumn-low': percentage < 0 }"
+      >
+        {{ math.abs(percentage) }}%
+      </span>
       <canvas
         #chart
         baseChart
@@ -28,50 +35,60 @@ import { Label } from "ng2-charts";
   styleUrls: ["./stock-chatter-volume-column.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StockChatterVolumeColumnComponent implements OnInit {
+export class StockChatterVolumeColumnComponent implements OnChanges {
   @Input() day: string;
-  @Input() percentage: string;
+  @Input() percentage: number;
+  @Input() data: string[];
 
   chartDataSet: ChartDataSets[];
   chartLabels: Label[];
   chartOptions: ChartOptions;
+  math = Math;
 
-  ngOnInit() {
-    this.chartDataSet = [{ data: [1, 5, 2, 10, 3] }];
-    this.chartLabels = ["1", "2", "3", "4", "5"];
-    this.chartOptions = {
-      responsive: true,
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false
-      },
-      scales: {
-        gridLines: { display: false, lineWidth: 0 },
-        xAxes: [
-          {
-            ticks: {
-              display: false
-            },
-            gridLines: {
-              display: false,
-              lineWidth: 0
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data && changes.data.currentValue) {
+      this.chartDataSet = [
+        {
+          data: this.data.map(item => parseInt(item, 10)),
+          backgroundColor: "#487bce",
+          hoverBackgroundColor: "#5287dd"
+        }
+      ];
+      this.chartLabels = this.data;
+      this.chartOptions = {
+        responsive: true,
+        legend: {
+          display: false
+        },
+        tooltips: {
+          enabled: false
+        },
+        scales: {
+          gridLines: { display: false, lineWidth: 0 },
+          xAxes: [
+            {
+              ticks: {
+                display: false
+              },
+              gridLines: {
+                display: false,
+                lineWidth: 0
+              }
             }
-          }
-        ],
-        yAxes: [
-          {
-            ticks: {
-              display: false
-            },
-            gridLines: {
-              display: false,
-              lineWidth: 0
+          ],
+          yAxes: [
+            {
+              ticks: {
+                display: false
+              },
+              gridLines: {
+                display: false,
+                lineWidth: 0
+              }
             }
-          }
-        ]
-      }
-    };
+          ]
+        }
+      };
+    }
   }
 }

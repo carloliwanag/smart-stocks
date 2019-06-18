@@ -10,8 +10,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
       fxLayoutGap="32px"
       fxLayoutGap.xs="0"
     >
-      <div [fxFlex]="'62%'">
-        <mat-card>
+      <div [fxFlex]="'50%'">
+        <mat-card class="StockSocial-cardWrap">
           <mat-card-header>
             <mat-card-title class="StockSocial-cardTitle">
               Word Cloud
@@ -26,8 +26,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
           </mat-card-content>
         </mat-card>
       </div>
-      <div [fxFlex]="'38%'">
-        <mat-card>
+      <div [fxFlex]="'50%'">
+        <mat-card class="StockSocial-cardWrap">
           <mat-card-header>
             <mat-card-title class="StockSocial-cardTitle">
               Chatter Volume
