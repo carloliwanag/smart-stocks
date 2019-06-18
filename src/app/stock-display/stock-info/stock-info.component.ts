@@ -43,8 +43,9 @@ import {
     >
       <mat-tab label="Social">
         <app-stock-social
-          *ngIf="!isLoadingSocial && selectedTab === 0 && socialData"
+          *ngIf="!isLoadingSocial && socialData"
           [data]="socialData"
+          [isDisplayed]="selectedTab === 0"
         ></app-stock-social>
         <mat-spinner
           class="StockInfo-spinner"
@@ -239,5 +240,6 @@ export class StockInfoComponent implements OnInit, OnDestroy {
 
   tabChanged($event: MatTabChangeEvent) {
     this.selectedTab = $event.index;
+    this.cd.detectChanges();
   }
 }

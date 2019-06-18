@@ -19,7 +19,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
           </mat-card-header>
           <mat-card-content class="">
             <app-stock-word-cloud
-              *ngIf="data && data.wordCloud"
+              *ngIf="isDisplayed && data && data.wordCloud"
               [data]="data.wordCloud"
             >
             </app-stock-word-cloud>
@@ -46,4 +46,5 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 })
 export class StockSocialComponent {
   @Input() data: any;
+  @Input() isDisplayed: false;
 }
