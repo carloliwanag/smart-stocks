@@ -27,6 +27,7 @@ import { Label } from "ng2-charts";
         [labels]="chartLabels"
         [options]="chartOptions"
         [chartType]="'bar'"
+        style="width: 100%;"
       >
       </canvas>
     </section>

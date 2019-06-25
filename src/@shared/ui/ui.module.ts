@@ -5,6 +5,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatAutocompleteModule,
+  MatCardModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
@@ -38,6 +39,7 @@ import { StockSummaryGraphComponent } from "./stock-summary-graph";
 import { StockTrendGraphComponent } from "./stock-trend-graph";
 import { StockVolumeGraphComponent } from "./stock-volume-graph";
 import { StockWordCloudComponent } from "./stock-word-cloud";
+import { TwitterCardComponent } from "./twitter-card";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -45,6 +47,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
+    EventsMapComponent,
     NavSearchComponent,
     StockChatterVolumeColumnComponent,
     StockChatterVolumeGraphComponent,
@@ -58,7 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockTrendGraphComponent,
     StockVolumeGraphComponent,
     StockWordCloudComponent,
-    EventsMapComponent
+    TwitterCardComponent
   ],
   imports: [
     ChartsModule,
@@ -66,6 +69,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FlexLayoutModule,
     FormsModule,
     MatAutocompleteModule,
+    MatCardModule,
     MatFormFieldModule,
     MatListModule,
     MatIconModule,
@@ -81,6 +85,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     })
   ],
   exports: [
+    EventsMapComponent,
     NavSearchComponent,
     StockChatterVolumeGraphComponent,
     StockFinanceDetailsComponent,
@@ -91,7 +96,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockStatisticsComponent,
     StockTrendGraphComponent,
     StockWordCloudComponent,
-    EventsMapComponent
+    TwitterCardComponent
   ],
   providers: [
     {

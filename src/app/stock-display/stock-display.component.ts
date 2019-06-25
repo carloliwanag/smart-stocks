@@ -36,8 +36,8 @@ const DEFAULT_COLUMN_WIDTH = {
 };
 
 const PREVIEW_COLUMN_WIDTH = {
-  left: "40%",
-  right: "60%"
+  left: "36%",
+  right: "64%"
 };
 
 export interface ColumWidth {

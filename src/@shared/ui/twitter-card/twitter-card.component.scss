@@ -1,0 +1,83 @@
+.TwitterCard {
+  background-color: #2c2c2c;
+  margin-bottom: 18px;
+
+  &-author {
+    display: flex;
+    align-items: center;
+  }
+
+  &-avatar {
+    font-size: 0;
+    margin-right: 12px;
+
+    img {
+      max-height: 48px;
+      max-width: 48px;
+      border-radius: 50%;
+    }
+  }
+
+  &-authorLink {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-authorName {
+    font-size: 18px;
+    font-weight: 500;
+
+    &:hover {
+      color: #2b7bb9;
+    }
+  }
+
+  &-authorUsername {
+    color: #aaa;
+  }
+
+  &-stats {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+
+  &-post {
+    color: #efefef;
+    line-height: 1.4;
+    margin: 16px 0;
+  }
+
+  &-heart {
+    color: #e2384f;
+  }
+
+  &-commented {
+    color: #238913;
+  }
+
+  &-retweet {
+    color: #385fc9;
+  }
+
+  &-actionCount {
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 8px;
+  }
+
+  &-tweetUrl {
+    cursor: pointer;
+    color: #aaa;
+    margin-left: 4px;
+
+    &:hover {
+      color: #2b7bb9;
+    }
+  }
+}
