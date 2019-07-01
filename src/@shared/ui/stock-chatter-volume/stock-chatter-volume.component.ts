@@ -59,7 +59,7 @@ export class StockChatterVolumeGraphComponent implements OnChanges {
 
     if (changes.volumeChatter && changes.volumeChatter.currentValue) {
       this.dataToday = this.volumeChatter
-        .slice(0, 4)
+        .slice(0, 5)
         .map(vc => vc.total_likes + vc.total_retweets);
 
       if (this.volumeChatter.length <= 10) {
@@ -67,13 +67,13 @@ export class StockChatterVolumeGraphComponent implements OnChanges {
       }
 
       this.dataFiveDays = this.volumeChatter
-        .slice(5, 9)
+        .slice(5, 10)
         .map(vc => vc.total_likes + vc.total_retweets);
 
       const sumToday = this.getDataSum(this.dataToday);
       const sumFiveDays = this.getDataSum(this.dataFiveDays);
       const sumTenDays = this.volumeChatter
-        .slice(10, 14)
+        .slice(10, 15)
         .reduce(
           (prev, current) =>
             prev + current.total_likes + current.total_retweets,
@@ -92,7 +92,7 @@ export class StockChatterVolumeGraphComponent implements OnChanges {
 
   computeIncompleteData(data: ChatterVolumeList) {
     this.dataToday = this.volumeChatter
-      .slice(0, 4)
+      .slice(0, 5)
       .map(vc => vc.total_likes + vc.total_retweets);
 
     if (this.volumeChatter.length === 1) {
@@ -111,7 +111,7 @@ export class StockChatterVolumeGraphComponent implements OnChanges {
     }
 
     this.dataFiveDays = this.volumeChatter
-      .slice(5, 9)
+      .slice(5, 10)
       .map(vc => vc.total_likes + vc.total_retweets);
 
     const sumToday = this.getDataSum(this.dataToday);
