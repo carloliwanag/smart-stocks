@@ -45,6 +45,7 @@ import {
         <app-stock-social
           *ngIf="!isLoadingSocial && socialData"
           [data]="socialData"
+          [volumeChatter]="volumeChatterData"
           [isDisplayed]="selectedTab === 0"
         ></app-stock-social>
         <mat-spinner
