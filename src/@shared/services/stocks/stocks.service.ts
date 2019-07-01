@@ -143,4 +143,14 @@ export class StocksService {
         })
       );
   }
+
+  public getVolumeChatter(symbol: string, date: string): Rx.Observable<any | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/stock-volume-chatter/${symbol}?date=${date}`)
+      .pipe(
+        map((response: any) => {
+          return response.data.result || undefined;
+        })
+      );
+  }
 }
