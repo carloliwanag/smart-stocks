@@ -53,19 +53,23 @@
   }
 
   &-heart {
-    color: #e2384f;
+    // color: #e2384f;
+    color: #777;
   }
 
   &-commented {
-    color: #238913;
+    // color: #238913;
+    color: #777;
   }
 
   &-retweet {
-    color: #385fc9;
+    // color: #385fc9;
+    color: #777;
   }
 
   &-actionCount {
-    color: #ccc;
+    // color: #ccc;
+    color: #777;
     font-size: 14px;
     font-weight: 500;
     margin-right: 8px;
@@ -73,7 +77,7 @@
 
   &-tweetUrl {
     cursor: pointer;
-    color: #aaa;
+    color: #777;
     margin-left: 4px;
 
     &:hover {
