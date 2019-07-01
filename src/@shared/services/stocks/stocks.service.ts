@@ -4,6 +4,7 @@ import * as Rx from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import {
+  ChatterVolumeList,
   EventsMapList,
   EventsMapResult,
   FOIAList,
@@ -144,12 +145,27 @@ export class StocksService {
       );
   }
 
-  public getVolumeChatter(symbol: string, date: string): Rx.Observable<any | undefined> {
+  public getVolumeChatter(
+    symbol: string,
+    date: string
+  ): Rx.Observable<ChatterVolumeList | undefined> {
     return this.httpClient
       .get(`${environment.API_URL}/stock-volume-chatter/${symbol}?date=${date}`)
       .pipe(
         map((response: any) => {
-          return response.data.result || undefined;
+          if (
+            !response.data ||
+            !response.data.result ||
+            response.data.result.length <= 0
+          ) {
+            return undefined;
+          }
+
+          return response.data.result.map(chatterVolume => ({
+            date: chatterVolume.date,
+            total_likes: parseInt(chatterVolume.total_likes, 10),
+            total_retweets: parseInt(chatterVolume.total_retweets, 10)
+          }));
         })
       );
   }

@@ -13,7 +13,6 @@ import { Label } from "ng2-charts";
     <section class="StockChatterVolumeColumn">
       <span class="StockChatterVolumeColumn-day">{{ day }}</span>
       <span
-        *ngIf="percentage"
         class="StockChatterVolumeColumn-percentage"
         [ngClass]="{ 'StockChatterVolumeColumn-low': percentage < 0 }"
       >
@@ -39,7 +38,7 @@ import { Label } from "ng2-charts";
 export class StockChatterVolumeColumnComponent implements OnChanges {
   @Input() day: string;
   @Input() percentage: number;
-  @Input() data: string[];
+  @Input() data: number[];
 
   chartDataSet: ChartDataSets[];
   chartLabels: Label[];
@@ -50,12 +49,12 @@ export class StockChatterVolumeColumnComponent implements OnChanges {
     if (changes.data && changes.data.currentValue) {
       this.chartDataSet = [
         {
-          data: this.data.map(item => parseInt(item, 10)),
+          data: this.data.reverse(),
           backgroundColor: "#487bce",
           hoverBackgroundColor: "#5287dd"
         }
       ];
-      this.chartLabels = this.data;
+      this.chartLabels = this.data.map(item => item.toString());
       this.chartOptions = {
         responsive: true,
         legend: {

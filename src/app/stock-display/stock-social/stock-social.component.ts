@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChatterVolumeList } from "@shared/services";
 
 @Component({
   template: `
@@ -31,7 +32,9 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
           </div>
           <mat-card class="StockSocial-cardWrap">
             <mat-card-content>
-              <app-stock-chatter-volume-graph [volumeChatter]="volumeChatter"></app-stock-chatter-volume-graph>
+              <app-stock-chatter-volume-graph
+                [volumeChatter]="volumeChatter"
+              ></app-stock-chatter-volume-graph>
             </mat-card-content>
           </mat-card>
         </div>
@@ -69,6 +72,6 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 })
 export class StockSocialComponent {
   @Input() data: any;
-  @Input() volumeChatter: any;
+  @Input() volumeChatter: ChatterVolumeList | undefined;
   @Input() isDisplayed: false;
 }

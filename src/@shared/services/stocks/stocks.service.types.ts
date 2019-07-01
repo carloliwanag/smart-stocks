@@ -148,3 +148,11 @@ export interface EventsMap {
   company_name: string;
   symbol: string;
 }
+
+export type ChatterVolumeList = ReadonlyArray<ChatterVolume>;
+
+export interface ChatterVolume {
+  date: string;
+  total_likes: number;
+  total_retweets: number;
+}
