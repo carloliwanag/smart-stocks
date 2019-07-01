@@ -114,15 +114,18 @@ export class StockInfoComponent implements OnInit, OnDestroy {
   stock$: Rx.Observable<any>;
   social$: Rx.Observable<any>;
   foia$: Rx.Observable<FOIAList>;
-
+  volumeChatter$: Rx.Observable<any>;
   isLoadingFoia = true;
   isLoadingNews = true;
   isLoadingSocial = true;
   isLoadingStock = true;
   selectedTab = 0;
   socialData: any;
-
+  volumeChatterData: any;
   private socialDataSubscription: Rx.Subscription;
+  private volumeChatterSub: Rx.Subscription;
+
+  isLoadingVolumeChatter: boolean;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -210,6 +213,25 @@ export class StockInfoComponent implements OnInit, OnDestroy {
       refCount()
     );
 
+    this.volumeChatter$ = stockDetailSearch$.pipe(
+      tap(() => {
+        this.isLoadingVolumeChatter = true;
+        this.cd.detectChanges();
+      }),
+      switchMap(stockDetailSearch => {
+        return this.stocksService.getVolumeChatter(
+            stockDetailSearch.symbol,
+            stockDetailSearch.date
+          );
+      }),
+      tap(() => {
+        this.isLoadingVolumeChatter = false;
+        this.cd.detectChanges();
+      }),
+      publishReplay(1),
+      refCount()
+    );
+
     /**
      * Hack for angular cloud word component wherein it stupidly tries to redraw
      * the words by checking if a word can fit a particular DOM element even if
@@ -222,11 +244,19 @@ export class StockInfoComponent implements OnInit, OnDestroy {
     this.socialDataSubscription = this.social$.subscribe(result => {
       this.socialData = result;
     });
+
+    this.volumeChatterSub = this.volumeChatter$.subscribe(result => {
+      this.volumeChatterData = result;
+    });
   }
 
   ngOnDestroy() {
     if (this.socialDataSubscription) {
       this.socialDataSubscription.unsubscribe();
+    }
+
+    if(this.volumeChatterSub) {
+      this.volumeChatterSub.unsubscribe();
     }
   }
 
