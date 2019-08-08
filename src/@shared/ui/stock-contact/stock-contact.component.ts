@@ -52,7 +52,7 @@ export class StockContactComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.data && changes.data.currentValue) {
+    if (changes.contact && changes.contact.currentValue) {
       this.prepareData();
     }
   }
