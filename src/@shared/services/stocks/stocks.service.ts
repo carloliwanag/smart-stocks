@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as Rx from "rxjs";
-import { map } from "rxjs/operators";
+import { catchError, map, timeout } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import {
   ChatterVolumeList,
@@ -21,6 +21,8 @@ import {
   StockWordCloudResult
 } from "./stocks.service.types";
 
+const DEFAULT_REQUEST_TIMEOUT = 20000;
+
 @Injectable({
   providedIn: "root"
 })
@@ -37,13 +39,15 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-detail/${symbol}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: any) => {
           if (response && response.data) {
             return response.data;
           }
 
           return undefined;
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -54,6 +58,7 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-news/${symbol}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: any) => {
           if (
             response &&
@@ -73,7 +78,8 @@ export class StocksService {
           }
 
           return undefined;
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -81,13 +87,15 @@ export class StocksService {
     symbol: string
   ): Rx.Observable<StockSearchList | undefined> {
     return this.httpClient.get(`${environment.API_URL}/stock/${symbol}`).pipe(
+      timeout(DEFAULT_REQUEST_TIMEOUT),
       map((response: StockNamesResult) => {
         if (response.data.length > 0) {
           return response.data;
         }
 
         return undefined;
-      })
+      }),
+      catchError(error => Rx.of(undefined))
     );
   }
 
@@ -96,13 +104,15 @@ export class StocksService {
     date: string = undefined
   ): Rx.Observable<FOIAList | undefined> {
     return this.httpClient.get(`${environment.API_URL}/foia/${symbol}`).pipe(
+      timeout(DEFAULT_REQUEST_TIMEOUT),
       map((response: FOIAResult) => {
         if (response.data.length > 0) {
           return response.data;
         }
 
         return undefined;
-      })
+      }),
+      catchError(error => Rx.of(undefined))
     );
   }
 
@@ -112,13 +122,15 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-sentiment/${symbol}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: StockSentimentResult) => {
           if (response.data.general_sentiment) {
             return response.data;
           }
 
           return undefined;
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -129,9 +141,11 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-wc/${symbol}?date=${date}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: StockWordCloudResult) => {
           return response.data || undefined;
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -141,9 +155,11 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-map/${symbol}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: EventsMapResult) => {
           return response.data.result || undefined;
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -154,6 +170,7 @@ export class StocksService {
     return this.httpClient
       .get(`${environment.API_URL}/stock-volume-chatter/${symbol}?date=${date}`)
       .pipe(
+        timeout(DEFAULT_REQUEST_TIMEOUT),
         map((response: any) => {
           if (
             !response.data ||
@@ -168,7 +185,8 @@ export class StocksService {
             total_likes: parseInt(chatterVolume.total_likes, 10),
             total_retweets: parseInt(chatterVolume.total_retweets, 10)
           }));
-        })
+        }),
+        catchError(error => Rx.of(undefined))
       );
   }
 
@@ -176,8 +194,10 @@ export class StocksService {
     symbol: string,
     date: string = undefined
   ): Rx.Observable<Contact | undefined> {
-    return this.httpClient
-      .get(`${environment.API_URL}/contact/${symbol}`)
-      .pipe(map((response: ContactResult) => response.data || undefined));
+    return this.httpClient.get(`${environment.API_URL}/contact/${symbol}`).pipe(
+      timeout(DEFAULT_REQUEST_TIMEOUT),
+      map((response: ContactResult) => response.data || undefined),
+      catchError(error => Rx.of(undefined))
+    );
   }
 }
