@@ -11,6 +11,7 @@ import {
 } from "@angular/core";
 import { MatTabChangeEvent } from "@angular/material";
 import {
+  Contact,
   FOIAList,
   StockDetailSearch,
   StockNewsList,
@@ -101,6 +102,18 @@ import {
           [diameter]="50"
         ></mat-spinner>
       </mat-tab>
+      <mat-tab label="Contact">
+        <app-stock-contact
+          [hidden]="isLoadingContact"
+          [contact]="contact$ | async"
+        ></app-stock-contact>
+        <mat-spinner
+          class="StockInfo-spinner"
+          *ngIf="isLoadingContact"
+          [color]="'accent'"
+          [diameter]="50"
+        ></mat-spinner>
+      </mat-tab>
     </mat-tab-group>
   `,
   selector: "app-stock-info",
@@ -111,11 +124,13 @@ export class StockInfoComponent implements OnInit, OnDestroy {
   @Input() stockDetailSearch$: Rx.Observable<StockDetailSearch>;
   @Output() close = new EventEmitter<boolean>();
 
+  contact$: Rx.Observable<Contact>;
   news$: Rx.Observable<StockNewsList>;
   stock$: Rx.Observable<any>;
   social$: Rx.Observable<any>;
   foia$: Rx.Observable<FOIAList>;
   volumeChatter$: Rx.Observable<any>;
+  isLoadingContact = true;
   isLoadingFoia = true;
   isLoadingNews = true;
   isLoadingSocial = true;
@@ -221,12 +236,28 @@ export class StockInfoComponent implements OnInit, OnDestroy {
       }),
       switchMap(stockDetailSearch => {
         return this.stocksService.getVolumeChatter(
-            stockDetailSearch.symbol,
-            stockDetailSearch.date
-          );
+          stockDetailSearch.symbol,
+          stockDetailSearch.date
+        );
       }),
       tap(() => {
         this.isLoadingVolumeChatter = false;
+        this.cd.detectChanges();
+      }),
+      publishReplay(1),
+      refCount()
+    );
+
+    this.contact$ = stockDetailSearch$.pipe(
+      tap(() => {
+        this.isLoadingContact = true;
+        this.cd.detectChanges();
+      }),
+      switchMap(stockDetailSearch =>
+        this.stocksService.getContactBySymbol(stockDetailSearch.symbol)
+      ),
+      tap(() => {
+        this.isLoadingContact = false;
         this.cd.detectChanges();
       }),
       publishReplay(1),
@@ -256,7 +287,7 @@ export class StockInfoComponent implements OnInit, OnDestroy {
       this.socialDataSubscription.unsubscribe();
     }
 
-    if(this.volumeChatterSub) {
+    if (this.volumeChatterSub) {
       this.volumeChatterSub.unsubscribe();
     }
   }

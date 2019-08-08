@@ -156,3 +156,32 @@ export interface ChatterVolume {
   total_likes: number;
   total_retweets: number;
 }
+
+export interface ContactResult {
+  data: Contact;
+}
+
+export interface Contact {
+  "Exec Name"?: string;
+  "Email 2"?: string;
+  "Email 1"?: string;
+  "Mkt Cap"?: string;
+  Website?: string;
+  Description?: string;
+  Exchange?: string;
+  Symbol?: string;
+  source?: string;
+  Link?: string;
+  Address?: string;
+  "Exec Last Name"?: string;
+  "Exec Middle Name"?: string;
+  Name?: string;
+  Industry?: string;
+  Sector?: string;
+  ExecTitle?: string;
+  "Exec First Name"?: string;
+  "Exec Salutation"?: string;
+  Telephone?: string;
+  "Exec Pay"?: string;
+  cap_type?: string;
+}

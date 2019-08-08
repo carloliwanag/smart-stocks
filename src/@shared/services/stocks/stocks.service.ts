@@ -5,6 +5,8 @@ import { map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import {
   ChatterVolumeList,
+  Contact,
+  ContactResult,
   EventsMapList,
   EventsMapResult,
   FOIAList,
@@ -168,5 +170,14 @@ export class StocksService {
           }));
         })
       );
+  }
+
+  public getContactBySymbol(
+    symbol: string,
+    date: string = undefined
+  ): Rx.Observable<Contact | undefined> {
+    return this.httpClient
+      .get(`${environment.API_URL}/contact/${symbol}`)
+      .pipe(map((response: ContactResult) => response.data || undefined));
   }
 }

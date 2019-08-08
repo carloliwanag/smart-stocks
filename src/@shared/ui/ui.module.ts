@@ -14,6 +14,7 @@ import {
   MatTableModule,
   MatTooltipModule
 } from "@angular/material";
+import { StockContactComponent } from "@shared/ui/stock-contact";
 import { TagCloudModule } from "angular-tag-cloud-module";
 import { ChartsModule } from "ng2-charts";
 import {
@@ -51,6 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavSearchComponent,
     StockChatterVolumeColumnComponent,
     StockChatterVolumeGraphComponent,
+    StockContactComponent,
     StockFinanceDetailsComponent,
     StockFoiaComponent,
     StockNewsComponent,
@@ -88,6 +90,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     EventsMapComponent,
     NavSearchComponent,
     StockChatterVolumeGraphComponent,
+    StockContactComponent,
     StockFinanceDetailsComponent,
     StockFoiaComponent,
     StockNewsComponent,
