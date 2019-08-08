@@ -21,8 +21,12 @@ import { Contact } from "@shared/services";
     >
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Name
+        </th>
+        <td mat-cell [ngClass]="'Contact-nameColumn'" *matCellDef="let element">
+          {{ element.name }}
+        </td>
       </ng-container>
 
       <!-- Value Column -->
