@@ -182,8 +182,8 @@ export class StocksService {
 
           return response.data.result.map(chatterVolume => ({
             date: chatterVolume.date,
-            total_likes: parseInt(chatterVolume.total_likes, 10),
-            total_retweets: parseInt(chatterVolume.total_retweets, 10)
+            total_likes: parseInt(chatterVolume.like_count, 10),
+            total_retweets: parseInt(chatterVolume.retweet_count, 10)
           }));
         }),
         catchError(error => Rx.of(undefined))
