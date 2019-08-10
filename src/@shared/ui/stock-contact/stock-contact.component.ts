@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild
-} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import { MatSort, MatTableDataSource } from "@angular/material";
 import { Contact } from "@shared/services";
 
@@ -56,9 +48,13 @@ export class StockContactComponent implements OnChanges {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
+    this.dataSource = undefined;
+
     if (changes.contact && changes.contact.currentValue) {
       this.prepareData();
     }
+
+    this.cd.detectChanges();
   }
 
   private prepareData() {
@@ -89,6 +85,5 @@ export class StockContactComponent implements OnChanges {
     ];
 
     this.dataSource = new MatTableDataSource(tableData);
-    this.cd.detectChanges();
   }
 }
