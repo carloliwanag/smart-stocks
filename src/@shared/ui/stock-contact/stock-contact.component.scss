@@ -5,6 +5,15 @@
   &-nameColumn {
     width: 150px;
   }
+
+  &-link {
+    color: #7ca6f2;
+    text-decoration: none;
+
+    &:hover {
+      color: #8fb2f0;
+    }
+  }
 }
 
 .mat-list-item {
