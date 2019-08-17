@@ -12,7 +12,8 @@ import {
   MatListModule,
   MatOptionModule,
   MatTableModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatExpansionModule
 } from "@angular/material";
 import { StockContactComponent } from "@shared/ui/stock-contact";
 import { TagCloudModule } from "angular-tag-cloud-module";
@@ -42,6 +43,8 @@ import { StockVolumeGraphComponent } from "./stock-volume-graph";
 import { StockWordCloudComponent } from "./stock-word-cloud";
 import { TwitterCardComponent } from "./twitter-card";
 
+import { ContactInfoComponent } from "./contact-info";
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -63,7 +66,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StockTrendGraphComponent,
     StockVolumeGraphComponent,
     StockWordCloudComponent,
-    TwitterCardComponent
+    TwitterCardComponent,
+    ContactInfoComponent
   ],
   imports: [
     ChartsModule,
@@ -82,6 +86,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     ReactiveFormsModule,
     TagCloudModule,
+    MatExpansionModule,
     AgmCoreModule.forRoot({
       apiKey: environment.GOOGLE_MAPS_API_KEY
     })
