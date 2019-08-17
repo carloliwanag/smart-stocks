@@ -124,7 +124,7 @@ export class StockInfoComponent implements OnInit, OnDestroy {
   @Input() stockDetailSearch$: Rx.Observable<StockDetailSearch>;
   @Output() close = new EventEmitter<boolean>();
 
-  contact$: Rx.Observable<Contact>;
+  contact$: Rx.Observable<Contact[]>;
   news$: Rx.Observable<StockNewsList>;
   stock$: Rx.Observable<any>;
   social$: Rx.Observable<any>;

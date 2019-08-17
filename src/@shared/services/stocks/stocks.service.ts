@@ -193,7 +193,7 @@ export class StocksService {
   public getContactBySymbol(
     symbol: string,
     date: string = undefined
-  ): Rx.Observable<Contact | undefined> {
+  ): Rx.Observable<Contact[] | undefined> {
     return this.httpClient.get(`${environment.API_URL}/contact/${symbol}`).pipe(
       timeout(DEFAULT_REQUEST_TIMEOUT),
       map((response: ContactResult) => response.data || undefined),
