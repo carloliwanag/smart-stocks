@@ -12,22 +12,25 @@ import { Contact } from "@shared/services";
 
 @Component({
   template: `
-    <mat-accordion *ngIf="contactList">
-      <app-contact-info
-        *ngFor="let c of contactList"
-        [contact]="c">
-      </app-contact-info>
-    </mat-accordion>
-    <mat-list *ngIf="!contact">
-      <mat-list-item>No results found</mat-list-item>
-    </mat-list>
+    <ng-container *ngIf="contactList; else noResults" class="StockContact">
+      <app-stock-contact-card
+        *ngFor="let contact of contactList"
+        [contact]="contact"
+      >
+      </app-stock-contact-card>
+    </ng-container>
+    <ng-template #noResults>
+      <mat-list>
+        <mat-list-item>No results found</mat-list-item>
+      </mat-list>
+    </ng-template>
   `,
   selector: "app-stock-contact",
   styleUrls: ["./stock-contact.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StockContactComponent implements OnChanges {
-  @Input() contact: Contact[] | undefined;
+  @Input() contact: ReadonlyArray<Contact> | undefined;
   displayedColumns: string[] = ["name", "value"];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
@@ -74,7 +77,6 @@ export class StockContactComponent implements OnChanges {
     //   { name: "Link", value: data.Link },
     //   { name: "Cap Type", value: data.cap_type }
     // ];
-
     // this.dataSource = new MatTableDataSource(tableData);
   }
 }
