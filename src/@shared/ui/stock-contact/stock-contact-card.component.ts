@@ -17,7 +17,7 @@ import { Contact } from "@shared/services";
             {{ contact["Exec Title"] }}
           </span>
           <span class="StockContactCard-person--info">{{
-            contact.Telephone
+            contact['Telephone']
           }}</span>
           <a
             href="mailto:{{ contact['Email 1'] }}"
@@ -26,7 +26,7 @@ import { Contact } from "@shared/services";
             {{ contact["Email 1"] }}
           </a>
           <span class="StockContactCard-person--info">{{
-            contact.Address
+            contact['Address']
           }}</span>
         </div>
       </div>
